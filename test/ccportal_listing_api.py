@@ -2,6 +2,7 @@ import json
 import smtplib
 import pytest
 import requests
+import pytz
 from datetime import datetime, timedelta
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
@@ -197,7 +198,8 @@ def test_send_mail():
     azure_count = afile_count
 
     # Format today's date
-    today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    #today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d %H:%M:%S")
 
     # Create the email message
     subject = f"Today's File Count - {today_date}"
@@ -210,8 +212,8 @@ def test_send_mail():
           <li>Organisation: Oakbrook</li>
           <li>Total File Received in Azure storage: {azure_count}</li>
           <li>Total File Received in CMS: {total_count}</li>
-          <li>Total Report Ready: {final_success_count}</li>
-          <li>Total In progress: {final_transcribed_count}</li>
+          <li>Total Report Ready: {success_count }</li>
+          <li>Total In progress: {transcribed_count}</li>
         </ul>
       </body>
     </html>
