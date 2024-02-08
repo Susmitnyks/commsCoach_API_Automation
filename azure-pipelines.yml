@@ -26,6 +26,7 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pytest ccportal_listing_api.py
+    pytest test\ccportal_listing_api.py
+
     
   displayName: 'pytest'
