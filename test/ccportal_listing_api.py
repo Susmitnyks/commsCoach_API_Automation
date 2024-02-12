@@ -188,8 +188,8 @@ def test_send_mail():
     smtp_password = "qzod ltfm nmav tqvw"
 
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
@@ -202,18 +202,18 @@ def test_send_mail():
     today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d %H:%M:%S")
 
     # Create the email message
-    subject = f"Today's File Count Till now - {today_date}"
+    subject = f"Daily Report: Calls File Count Monitoring (12AM - 11:59PM) - {today_date}"
     # body = f" Files received in CMS today as below: \n Organisation: Oakbrook \n Total Count: {total_count}\n Success Count: {success_count}\n Failed Count: {failed_count}\n Transcribed Count: {transcribed_count} "
     body = f"""
     <html>
       <body>
-        <p><b>Files showing on PRODUCTION CommsCoach portal today as below:</b></p>
+        <p><b>Files count showing on PRODUCTION CommsCoach portal today as below:</b></p>
         <ul>
           <li>Organisation: Oakbrook</li>
-          <li>Total File Received in Azure storage: {azure_count}</li>
-          <li>Total File Received in CMS: {total_count}</li>
-          <li>Total Report Ready: {success_count }</li>
-          <li>Total In progress: {transcribed_count}</li>
+          <li>Total Files Received in Azure blob storage: {azure_count}</li>
+          <li>Total Files Received in CMS: {total_count}</li>
+          <li>Total Evaluations Reports Ready: {success_count }</li>
+          <li>Total Evaluations In progress: {transcribed_count}</li>
         </ul>
       </body>
     </html>
