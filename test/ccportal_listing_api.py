@@ -188,8 +188,8 @@ def test_send_mail():
     smtp_password = "qzod ltfm nmav tqvw"
 
     # Recipient email address
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
@@ -199,10 +199,10 @@ def test_send_mail():
 
     # Format today's date
     #today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%Y-%m-%d %H:%M:%S")
+    today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
 
     # Create the email message
-    subject = f"Daily Report: Calls File Count Monitoring (12AM - 11:59PM) - {today_date}"
+    subject = f"Daily Report: Files Count Monitoring (12AM - 11:59PM) - {today_date}"
     # body = f" Files received in CMS today as below: \n Organisation: Oakbrook \n Total Count: {total_count}\n Success Count: {success_count}\n Failed Count: {failed_count}\n Transcribed Count: {transcribed_count} "
     body = f"""
     <html>
