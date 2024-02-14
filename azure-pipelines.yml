@@ -26,7 +26,22 @@ steps:
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pytest test/ccportal_listing_api.py
+    pytest test/ccportal_api_automation.py
 
+- script: |
+    pytest --alluredir=allure-results
+    displayName: 'Generate Allure Results'
+
+- script: |
+    pytest allure generate --single-file test/allure-results
+    displayName: 'Generate Allure Report'
+
+- script: |
+    pip install pytest pytest-azurepipelines
+    pytest test/ccportal_email.py
+
+- script: |
+      rm -f test/allure-results/*.json
+    displayName: 'Delete JSON Files'
     
   displayName: 'pytest'

@@ -5,3 +5,7 @@ Points to consider while writing scripts:
 4) Create functions for generic actions
 5) Handle exception.
 6) Apply assert for checking the test cases.
+
+
+--html=C:\Users\SusmitSurwade\PycharmProjects\commsCoach_API_Automation\test\reports\test_report_$(date:yyyyMMdd).html
+--alluredir=allure_results
