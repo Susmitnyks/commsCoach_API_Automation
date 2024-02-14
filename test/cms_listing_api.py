@@ -65,6 +65,8 @@ def test_count_transcribed():
 
 def test_send_mail():
     # Your email configuration
+
+
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
     smtp_username = "susmit.s.surwade@gmail.com"

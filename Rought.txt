@@ -1,0 +1,7 @@
+Points to consider while writing scripts:
+1) any url or env should be maintain in the variable.
+2) If possible make data parameterization using config or execl doc.
+3) Use POM , create functions for recursive use.
+4) Create functions for generic actions
+5) Handle exception.
+6) Apply assert for checking the test cases.
