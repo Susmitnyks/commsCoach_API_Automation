@@ -28,7 +28,7 @@ steps:
 - script: |
     pip install pytest pytest-azurepipelines
     pip install allure-pytest 
-    pytest test/ccportal_listing_api.py
+    pytest test/ccportal_api_automation.py --alluredir=allure-results
     pytest test/ccportal_generate_report.py
     pytest test/ccportal_email.py
 
