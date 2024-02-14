@@ -9,3 +9,62 @@ Points to consider while writing scripts:
 
 --html=C:\Users\SusmitSurwade\PycharmProjects\commsCoach_API_Automation\test\reports\test_report_$(date:yyyyMMdd).html
 --alluredir=allure_results
+
+
+-----------
+old yaml
+
+# Python package
+# Create and test a Python package on multiple Python versions.
+# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+jobs:
+- job: TestAndGenerateReport
+  displayName: 'Test and Generate Allure Report'
+  strategy:
+    matrix:
+      Python39:
+        python.version: '3.9'
+
+  steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+    displayName: 'Use Python $(python.version)'
+
+  - script: |
+      python -m pip install --upgrade pip
+      pip install -r requirements.txt
+    displayName: 'Install dependencies'
+
+  - script: |
+      pip install pytest pytest-azurepipelines
+      pip install allure-pytest
+      pytest test/ccportal_api_automation.py
+    displayName: 'Run API tests'
+
+  - script: |
+      pytest tests --alluredir=allure-results
+    displayName: 'Generate Allure Results'
+
+
+  - script: |
+      allure generate --single-file allure-results
+    displayName: 'Generate Allure Report'
+
+  - script: |
+      pip install pytest pytest-azurepipelines
+      pytest test/ccportal_email.py
+    displayName: 'Run Email tests'
+
+  - script: |
+      rm -f test/allure-results/*.json
+    displayName: 'Delete JSON Files'
+
