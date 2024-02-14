@@ -69,8 +69,15 @@ def send_email():
     receiver_email = "susmit.surwade@blenheimchalcot.com"
     subject = f"CC DAILY AUTOMATION REPORT: {today_date}"
     body = "Please find the attached test automation html report."
-    filepath = "C:\\Users\\SusmitSurwade\\PycharmProjects\\commsCoach_API_Automation\\test\\allure-report\\index.html"
+    #filepath = "C:\\Users\\SusmitSurwade\\PycharmProjects\\commsCoach_API_Automation\\test\\allure-report\\index.html"
     # Create email message
+    # Construct the relative path to the index.html file
+    filepath = os.path.join("allure-report", "index.html")
+
+    # Get the directory of the current script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(script_dir, filepath)
+
     message = MIMEMultipart()
     message["From"] = smtp_username
     message["To"] = receiver_email
