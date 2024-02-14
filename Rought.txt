@@ -7,9 +7,9 @@ Points to consider while writing scripts:
 6) Apply assert for checking the test cases.
 
 
---html=C:\Users\SusmitSurwade\PycharmProjects\commsCoach_API_Automation\test\reports\test_report_$(date:yyyyMMdd).html
+--html=reports/report.html
 --alluredir=allure_results
-
+allure generate --single-file test/allure-results
 
 -----------
 old yaml
