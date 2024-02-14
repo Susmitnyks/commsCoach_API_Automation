@@ -1,0 +1,5 @@
+"Status","Start Time","Stop Time","Duration in ms","Parent Suite","Suite","Sub Suite","Test Class","Test Method","Name","Description"
+"passed","Tue Feb 13 18:36:33 IST 2024","Tue Feb 13 18:36:37 IST 2024","4320","","ccportal_api_automation","","","","test_listing_total_count",""
+"passed","Tue Feb 13 18:36:37 IST 2024","Tue Feb 13 18:36:39 IST 2024","2155","","ccportal_api_automation","","","","test_listing_sucess_fail_records[1]",""
+"passed","Tue Feb 13 18:36:39 IST 2024","Tue Feb 13 18:36:44 IST 2024","4423","","ccportal_api_automation","","","","test_listing_sucess_fail_records[2]",""
+"passed","Tue Feb 13 18:36:32 IST 2024","Tue Feb 13 18:36:33 IST 2024","545","","ccportal_api_automation","","","","test_refresh_token",""
