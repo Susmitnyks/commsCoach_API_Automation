@@ -35,8 +35,9 @@ jobs:
     displayName: 'Run API tests'
 
   - script: |
-      pytest --alluredir=allure-results
+      pytest tests --alluredir=allure-results
     displayName: 'Generate Allure Results'
+
 
   - script: |
       allure generate --single-file allure-results
