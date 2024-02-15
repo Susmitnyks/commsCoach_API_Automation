@@ -32,7 +32,7 @@ steps:
   displayName: 'Generate Allure report'
 
 - script: |
-    allure serve allure-results > allure.txt
+    /opt/allure-2.15.0/bin/allure serve allure-results > allure.txt
   displayName: 'Serve Allure report and save URL'
 
 - task: PowerShell@2
