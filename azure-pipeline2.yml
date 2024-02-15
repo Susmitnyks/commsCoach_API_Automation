@@ -29,8 +29,14 @@ steps:
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
     allure generate allure-results --clean -o allure-report
-    allure serve allure-results > allure_url.txt
-  displayName: 'Generate and Serve Allure report'
+  displayName: 'Generate Allure report'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'allure-report'
+    artifactName: 'Allure Report'
+    publishLocation: 'Container'
+  displayName: 'Publish Allure report as artifact'
 
 - task: PowerShell@2
   inputs:
@@ -40,12 +46,7 @@ steps:
       $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
       
-      $url = Get-Content allure_url.txt | Select-String -Pattern 'Server started at:' | ForEach-Object { $_ -replace 'Server started at: ', '' }
-      
-      if ([string]::IsNullOrWhiteSpace($url)) {
-          Write-Host "Failed to extract URL from allure_url.txt"
-          exit 1
-      }
+      $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
       
       $emailBody = "Please find the Allure report here: $url"
 
