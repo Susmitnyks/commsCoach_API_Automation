@@ -28,8 +28,7 @@ steps:
     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
-    allure generate allure-results --clean -o allure-report
-    allure report generate --report-dir allure-report --format html -o allure-report/allure-report.html
+    allure generate allure-results --clean --single-file -o allure-report
   displayName: 'Generate Allure report'
 
 - task: PublishBuildArtifacts@1
