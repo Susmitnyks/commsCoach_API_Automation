@@ -1,0 +1,2 @@
+
+ Total Count of file with duration less than 10 mins are: 249
