@@ -73,7 +73,7 @@ def test_refresh_token():
     return access_token
 
 
-def test_listing_total_count():
+def test_listing_api_total_files_count():
     global TCount
     access_token = test_refresh_token()
     global page_no
@@ -106,7 +106,7 @@ def test_listing_total_count():
 
 # @pytest.mark.parametrize("page_number", range(1, test_listing_total_count() + 1))
 @pytest.mark.parametrize("page_number", range(1, 3))
-def test_listing_sucess_fail_records(page_number):
+def test_listing_api_report_ready_report_inprogress_files(page_number):
     success_count = 0
     transcribed_count = 0
     url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[conversationType][0]=Voice&page={page_number}&sort=-startDate"
@@ -151,7 +151,7 @@ def test_listing_sucess_fail_records(page_number):
 
 
 
-def test_Total_Count_less_than_10min():
+def test_listing_api_Total_files_Count_less_than_10min():
     url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]=13%2F02%2F2024&filters[conversationType][0]=Voice&filters[duration][min]=00:00:00&filters[duration][max]=00:10:00&page=1&sort=-startDate"
     payload = {}
     headers = {
@@ -175,3 +175,28 @@ def test_Total_Count_less_than_10min():
     assert response.status_code == 200
     DCount = json_response["meta"]["total"]
     print("\n Total Count of file with duration less than 10 mins are: " + str(DCount))
+
+def test_listing_api_Total_files_Count_greater_than_10min():
+    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]=13%2F02%2F2024&filters[conversationType][0]=Voice&filters[duration][min]=00:10:00&filters[duration][max]=00:30:00&page=1&sort=-startDate"
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    json_response = json.loads(response.text)
+    assert response.status_code == 200
+    DCount = json_response["meta"]["total"]
+    print("\n Total Count of file with duration greater than 10 mins are: " + str(DCount))

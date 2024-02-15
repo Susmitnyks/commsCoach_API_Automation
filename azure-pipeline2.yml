@@ -1,36 +1,39 @@
-
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 trigger:
-- master
+  branches:
+    include:
+      - main
 
 pool:
-  vmImage: ubuntu-latest
-strategy:
-  matrix:
-    Python39:
-      python.version: '3.9'
+  vmImage: 'ubuntu-latest'
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '$(python.version)'
-  displayName: 'Use Python $(python.version)'
-
-- script: |
-    python -m pip install --upgrade pip
-    pip install -r requirements.txt
-  displayName: 'Install dependencies'
+    versionSpec: '3.x'
+    addToPath: true
 
 - script: |
     pip install pytest pytest-azurepipelines
-    pip install allure-pytest 
+    pip install allure-pytest
+  displayName: 'Install dependencies'
+
+- script: |
     pytest test/ccportal_api_automation.py --alluredir=allure-results
-    pytest test/ccportal_generate_report.py
-    pytest test/ccportal_email.py
+  displayName: 'Run API automation tests'
 
+- script: |
+    allure generate allure-results -o allure-report --clean
+  displayName: 'Generate Allure report'
 
-  displayName: 'pytest'
+- task: PublishPipelineArtifact@1
+  inputs:
+    targetPath: 'allure-report'
+    artifact: 'allure-report'
+
+- task: SendEmail@1
+  inputs:
+    To: 'susmit.surwade@blenheimchalcot.com'
+    Subject: 'Allure Report'
+    Body: 'Please find the Allure report attached.'
+    Attachments: '$(System.DefaultWorkingDirectory)/allure-report'
+
