@@ -41,18 +41,22 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $emailBody = "Please find the Allure report here: $(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)"
+      $organization = "susmitsurwade"  # Replace with your Azure DevOps organization name
+      $project = "SusmitDemo"  # Replace with your project name
+      $buildId = "$(Build.BuildId)"
+      $emailBody = "Please find the Allure report here: https://dev.azure.com/$organization/$project/_build/results?buildId=$buildId&view=results"
+      
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
       $to = "susmit.surwade@blenheimchalcot.com"
       $subject = "Allure Report"
-      $body = $emailBody
       
       $username = "susmit.s.surwade@gmail.com"  # Replace with your SMTP username
       $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force  # Replace with your SMTP password
       $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
       
-      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $body -Credential $credentials
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
   displayName: 'Send Email Notification'
+
 
