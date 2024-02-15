@@ -1,14 +1,7 @@
 import json
-import smtplib
-import subprocess
-
 import pytest
 import requests
 from datetime import datetime, timedelta
-from email.mime.application import MIMEApplication
-from email.mime.multipart import MIMEMultipart
-from email.mime.text import MIMEText
-from azure.storage.blob import BlobServiceClient
 import os
 
 
