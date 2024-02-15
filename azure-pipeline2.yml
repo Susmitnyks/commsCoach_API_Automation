@@ -42,9 +42,17 @@ steps:
     targetType: 'inline'
     script: |
       $emailBody = "Please find the Allure report here: $(System.CollectionUri)$(System.TeamProject)/_build/results?buildId=$(Build.BuildId)"
-      $username = "susmit.s.surwade@gmail.com"
-      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
+      $smtpServer = "smtp.gmail.com"
+      $smtpPort = 587
+      $from = "susmit.s.surwade@gmail.com"
+      $to = "susmit.surwade@blenheimchalcot.com"
+      $subject = "Allure Report"
+      $body = $emailBody
+      
+      $username = "susmit.s.surwade@gmail.com"  # Replace with your SMTP username
+      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force  # Replace with your SMTP password
       $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
-      Send-MailMessage -SmtpServer 'smtp.example.com' -Port 587 -UseSsl -From 'susmit.s.surwade@gmail.com' -To 'susmit.surwade@blenheimchalcot.com' -Subject 'Allure Report' -Body $emailBody -Credential $credentials
+      
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $body -Credential $credentials
   displayName: 'Send Email Notification'
 
