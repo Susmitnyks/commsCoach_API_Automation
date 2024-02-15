@@ -19,7 +19,7 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pytest test/ccportal_api_automation.py --alluredir=allure-results
+    pytest test/ccportal_api_automation.py
   displayName: 'Run API automation tests'
 
 - script: |
@@ -29,13 +29,12 @@ steps:
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
 
+    # Generate Allure report
     allure generate allure-results -o allure-report --clean
-  displayName: 'Generate Allure report'
 
-- task: PublishPipelineArtifact@1
-  inputs:
-    targetPath: 'allure-report'
-    artifact: 'allure-report'
+    # Serve Allure report and capture the URL
+    allure serve allure-report > allure_url.txt
+  displayName: 'Generate and Serve Allure report'
 
 - task: PowerShell@2
   inputs:
@@ -44,8 +43,19 @@ steps:
       $organization = "susmitsurwade"  # Replace with your Azure DevOps organization name
       $project = "SusmitDemo"  # Replace with your project name
       $buildId = "$(Build.BuildId)"
-      $emailBody = "Please find the Allure report here: https://dev.azure.com/$organization/$project/_build/results?buildId=$buildId&view=results"
       
+      # Read the URL from allure_url.txt
+      $url = Get-Content allure_url.txt | Select-String -Pattern 'Server started at:' | ForEach-Object { $_ -replace 'Server started at: ', '' }
+      
+      # Check if URL is empty
+      if ([string]::IsNullOrWhiteSpace($url)) {
+          Write-Host "Failed to extract URL from allure_url.txt"
+          exit 1
+      }
+      
+      # Construct the email body with the Allure report URL
+      $emailBody = "Please find the Allure report here: $url"
+
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
@@ -58,5 +68,6 @@ steps:
       
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
   displayName: 'Send Email Notification'
+
 
 
