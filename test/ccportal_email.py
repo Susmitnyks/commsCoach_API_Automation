@@ -69,7 +69,8 @@ def send_email():
     receiver_email = "susmit.surwade@blenheimchalcot.com"
     subject = f"CC DAILY AUTOMATION REPORT: {today_date}"
     body = "Please find the attached test automation html report."
-    filepath = "allure-report/index.html"
+    #filepath = "allure-report/index.html"
+    filepath = "./allure-report/index.html"
 
     message = MIMEMultipart()
     message["From"] = smtp_username
