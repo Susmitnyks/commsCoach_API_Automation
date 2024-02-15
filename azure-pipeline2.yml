@@ -28,8 +28,16 @@ steps:
     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
-    allure generate allure-results --clean -o allure-report --format html
-  displayName: 'Generate Allure HTML report'
+    allure generate allure-results --clean -o allure-report
+    allure report generate --report-dir allure-report --format html -o allure-report/allure-report.html
+  displayName: 'Generate Allure report'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'allure-report'
+    artifactName: 'Allure Report'
+    publishLocation: 'Container'
+  displayName: 'Publish Allure report as artifact'
 
 - task: PowerShell@2
   inputs:
@@ -39,31 +47,19 @@ steps:
       $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
 
-      # Construct the email body with embedded HTML content
-      $emailBody = @"
-     <html>
-     <head>
-     <title>Allure Report</title>
-     </head>
-     <body>
-     <h1>Allure Report</h1>
-     <p>Please find the Allure report below:</p>
-     $(Get-Content "allure-report/index.html" | Out-String)
-     </body>
-     </html>
-     "@
-      # SMTP configuration
+      $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
+
+      $emailBody = "Please find the Allure report here: $url"
+
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
       $to = "susmit.surwade@blenheimchalcot.com"
       $subject = "Allure Report"
 
-      # SMTP credentials
       $username = "susmit.s.surwade@gmail.com"
       $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
       $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
 
-      # Send email with the embedded HTML content
-      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -BodyAsHtml -Credential $credentials
-displayName: 'Send Email Notification'
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
+  displayName: 'Send Email Notification'
