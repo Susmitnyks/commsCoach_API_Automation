@@ -41,18 +41,17 @@ steps:
 
       # Construct the email body with embedded HTML content
       $emailBody = @"
-<html>
-<head>
-<title>Allure Report</title>
-</head>
-<body>
-<h1>Allure Report</h1>
-<p>Please find the Allure report below:</p>
-$([System.IO.File]::ReadAllText("allure-report/index.html"))
-</body>
-</html>
-"@
-
+     <html>
+     <head>
+     <title>Allure Report</title>
+     </head>
+     <body>
+     <h1>Allure Report</h1>
+     <p>Please find the Allure report below:</p>
+     $(Get-Content "allure-report/index.html" | Out-String)
+     </body>
+     </html>
+     "@
       # SMTP configuration
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
