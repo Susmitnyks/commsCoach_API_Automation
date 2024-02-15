@@ -15,6 +15,7 @@ steps:
 - script: |
     pip install pytest pytest-azurepipelines
     pip install allure-pytest
+    pip install requests
   displayName: 'Install dependencies'
 
 - script: |
