@@ -4,7 +4,6 @@ import subprocess
 
 import pytest
 import requests
-import pytz
 from datetime import datetime, timedelta
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
