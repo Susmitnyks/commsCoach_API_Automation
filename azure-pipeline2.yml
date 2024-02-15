@@ -15,7 +15,7 @@ steps:
 - script: |
     pip install pytest pytest-azurepipelines
     pip install allure-pytest
-    pip install requests  # Install the requests module
+    pip install requests
   displayName: 'Install dependencies'
 
 - script: |
@@ -24,14 +24,11 @@ steps:
 
 - script: |
     sudo apt-get update
-    sudo apt-get install wget unzip -y  # Install wget and unzip
+    sudo apt-get install wget unzip -y
     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
- 
-    # generate report
     allure generate allure-results --clean -o allure-report
-    # Serve Allure report and capture the URL
     allure serve allure-results > allure_url.txt
   displayName: 'Generate and Serve Allure report'
 
@@ -39,20 +36,17 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      $organization = "susmitsurwade"  # Replace with your Azure DevOps organization name
-      $project = "SusmitDemo"  # Replace with your project name
+      $organization = "susmitsurwade"
+      $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
       
-      # Read the URL from allure_url.txt
       $url = Get-Content allure_url.txt | Select-String -Pattern 'Server started at:' | ForEach-Object { $_ -replace 'Server started at: ', '' }
       
-      # Check if URL is empty
       if ([string]::IsNullOrWhiteSpace($url)) {
           Write-Host "Failed to extract URL from allure_url.txt"
           exit 1
       }
       
-      # Construct the email body with the Allure report URL
       $emailBody = "Please find the Allure report here: $url"
 
       $smtpServer = "smtp.gmail.com"
@@ -61,12 +55,9 @@ steps:
       $to = "susmit.surwade@blenheimchalcot.com"
       $subject = "Allure Report"
       
-      $username = "susmit.s.surwade@gmail.com"  # Replace with your SMTP username
-      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force  # Replace with your SMTP password
+      $username = "susmit.s.surwade@gmail.com"
+      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
       $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
       
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
   displayName: 'Send Email Notification'
-
-
-
