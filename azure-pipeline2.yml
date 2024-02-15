@@ -30,10 +30,10 @@ steps:
     targetPath: 'allure-report'
     artifact: 'allure-report'
 
-- task: SendEmail@1
+- task: PowerShell@2
   inputs:
-    To: 'susmit.surwade@blenheimchalcot.com'
-    Subject: 'Allure Report'
-    Body: 'Please find the Allure report attached.'
-    Attachments: '$(System.DefaultWorkingDirectory)/allure-report'
-
+    targetType: 'inline'
+    script: |
+      $emailBody = "Please find the Allure report here: $(Build.Repository.Uri)/_build/results?buildId=$(Build.BuildId)"
+      Send-MailMessage -SmtpServer 'your-smtp-server' -From 'sender@example.com' -To 'susmit.surwade@blenheimchalcot.com' -Subject 'Allure Report' -Body $emailBody
+  displayName: 'Send Email Notification'
