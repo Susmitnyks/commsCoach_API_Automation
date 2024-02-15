@@ -19,7 +19,7 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pytest test/ccportal_api_automation.py
+    pytest test/ccportal_api_automation.py --alluredir=allure-results
   displayName: 'Run API automation tests'
 
 - script: |
@@ -29,11 +29,9 @@ steps:
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
 
-    # Generate Allure report
-    allure generate allure-results -o allure-report --clean
 
     # Serve Allure report and capture the URL
-    allure serve allure-report > allure_url.txt
+    allure serve allure-results > allure_url.txt
   displayName: 'Generate and Serve Allure report'
 
 - task: PowerShell@2
