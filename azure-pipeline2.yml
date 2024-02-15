@@ -37,13 +37,6 @@ steps:
     sleep 30s # Adjust the duration as needed
   displayName: 'Serve Allure report'
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Start-Sleep -Seconds 300  # 5 minutes
-      Stop-Process -Name "allure" -Force
-  displayName: 'Stop Allure server after 5 minutes'
 
 - task: PowerShell@2
   inputs:
@@ -66,3 +59,11 @@ steps:
 
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
   displayName: 'Send Email Notification'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      Start-Sleep -Seconds 300  # 5 minutes
+      Stop-Process -Name "allure" -Force
+  displayName: 'Stop Allure server after 5 minutes'
