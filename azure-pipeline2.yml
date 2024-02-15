@@ -28,15 +28,8 @@ steps:
     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
     unzip allure.zip -d /opt
     export PATH=$PATH:/opt/allure-2.15.0/bin
-    allure generate allure-results --clean -o allure-report
-  displayName: 'Generate Allure report'
-
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: 'allure-report'
-    artifactName: 'Allure Report'
-    publishLocation: 'Container'
-  displayName: 'Publish Allure report as artifact'
+    allure generate allure-results --clean -o allure-report --format html
+  displayName: 'Generate Allure HTML report'
 
 - task: PowerShell@2
   inputs:
@@ -45,20 +38,28 @@ steps:
       $organization = "susmitsurwade"
       $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
-      
+
+      # Construct the URL to the HTML report
       $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
-      
+
+      # Construct the email body with the Allure report URL
       $emailBody = "Please find the Allure report here: $url"
 
+      # Attach the HTML report to the email
+      $attachmentPath = "allure-report/index.html"
+
+      # SMTP configuration
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
       $to = "susmit.surwade@blenheimchalcot.com"
       $subject = "Allure Report"
-      
+
+      # SMTP credentials
       $username = "susmit.s.surwade@gmail.com"
       $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
       $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
-      
-      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
+
+      # Send email with the Allure report URL and attach the HTML report
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credentials
   displayName: 'Send Email Notification'
