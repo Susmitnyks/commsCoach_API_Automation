@@ -39,14 +39,19 @@ steps:
       $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
 
-      # Construct the URL to the HTML report
-      $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
-
-      # Construct the email body with the Allure report URL
-      $emailBody = "Please find the Allure report here: $url"
-
-      # Attach the HTML report to the email
-      $attachmentPath = "allure-report/index.html"
+      # Construct the email body with embedded HTML content
+      $emailBody = @"
+<html>
+<head>
+<title>Allure Report</title>
+</head>
+<body>
+<h1>Allure Report</h1>
+<p>Please find the Allure report below:</p>
+$([System.IO.File]::ReadAllText("allure-report/index.html"))
+</body>
+</html>
+"@
 
       # SMTP configuration
       $smtpServer = "smtp.gmail.com"
@@ -60,6 +65,6 @@ steps:
       $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
       $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
 
-      # Send email with the Allure report URL and attach the HTML report
-      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credentials
-  displayName: 'Send Email Notification'
+      # Send email with the embedded HTML content
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -BodyAsHtml -Credential $credentials
+displayName: 'Send Email Notification'
