@@ -31,12 +31,9 @@ steps:
     allure generate allure-results --clean --single-file -o allure-report
   displayName: 'Generate Allure report'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathtoPublish: 'allure-report'
-    artifactName: 'Allure Report'
-    publishLocation: 'Container'
-  displayName: 'Publish Allure report as artifact'
+- script: |
+    allure serve allure-results > allure.txt
+  displayName: 'Serve Allure report and save URL'
 
 - task: PowerShell@2
   inputs:
@@ -46,7 +43,7 @@ steps:
       $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
 
-      $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
+      $url = Get-Content "allure.txt"
 
       $emailBody = "Please find the Allure report here: $url"
 
