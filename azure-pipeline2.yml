@@ -1,69 +1,75 @@
-trigger:
-  branches:
-    include:
-      - main
+name: ABOTautomation
 
-pool:
-  vmImage: 'ubuntu-latest'
+on:
+  push:
+    branches:
+      - ABOTAutoPytest
 
-steps:
-- task: UsePythonVersion@0
-  inputs:
-    versionSpec: '3.x'
-    addToPath: true
+jobs:
+  automation:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install chrome
+        run: |
+          sudo -E apt -f install -y
+          sudo -E apt-get install -y wget
+          sudo -E wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo -E apt-get install -y google-chrome-stable
+      - name: Set up Python 3.11.7
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.11.7"
 
-- script: |
-    pip install pytest pytest-azurepipelines
-    pip install allure-pytest
-    pip install requests
-  displayName: 'Install dependencies'
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-- script: |
-    pytest test/ccportal_api_automation.py --alluredir=allure-results
-  displayName: 'Run API automation tests'
+      - name: Install dependencies
+        run:
+          pip install --upgrade pip
+          pip install pytest
+          pip install allure-pytest
+          pip install typing_extensions==4.7.1 --upgrade
+          pip install selenium==4.17.0
+          pip install allure-pytest
+          pip install allure-python-commons==2.13.2
+          pip install -U deepeval
+          pip install telnetlib3
 
-- script: |
-    sudo apt-get update
-    sudo apt-get install wget unzip -y
-    wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
-    unzip allure.zip -d /opt
-    export PATH=$PATH:/opt/allure-2.15.0/bin
-    allure generate allure-results --clean --single-file -o allure-report
-  displayName: 'Generate Allure report'
+      - name: Install other dependencies
+        run: |
+          if [ -f "requirements.txt" ]; then
+            pip install -r requirements.txt
+          fi
 
-- script: |
-    export PATH=$PATH:/opt/allure-2.15.0/bin
-    allure serve allure-results --port 8080 --no-open > allure.txt &
-    sleep 30s # Adjust the duration as needed
-  displayName: 'Serve Allure report'
+      - name: Create reports directory
+        run: mkdir -p reports
 
+      - name: Run tests and generate allure reports
+        run: |
+          cd Tests/
+          pytest --alluredir=../reports
 
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Start-Sleep -Seconds 10 # Give some time for the server to start
-      $url = Get-Content "allure.txt"
+      - name: Set Output
+        id: results
+        run: echo "::set-output name=artifactPath::reports"
 
-      $emailBody = "Please find the Allure report here: $url"
+      - name: Upload test reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-reports
+          path: ${{ steps.results.outputs.artifactPath }}
 
-      $smtpServer = "smtp.gmail.com"
-      $smtpPort = 587
-      $from = "susmit.s.surwade@gmail.com"
-      $to = "susmit.surwade@blenheimchalcot.com"
-      $subject = "Allure Report"
-
-      $username = "susmit.s.surwade@gmail.com"
-      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
-      $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
-
-      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
-  displayName: 'Send Email Notification'
-
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: |
-      Start-Sleep -Seconds 300  # 5 minutes
-      Stop-Process -Name "allure" -Force
-  displayName: 'Stop Allure server after 5 minutes'
+      - name: Send email with report URL
+        env:
+          SMTP_SERVER: smtp.gmail.com
+          SMTP_PORT: 587
+          USERNAME: susmit.s.surwade@gmail.com
+          PASSWORD: ${{ secrets.EMAIL_PASSWORD }} # Email password stored in Azure Pipeline Secrets
+          FROM_EMAIL: susmit.s.surwade@gmail.com
+          TO_EMAIL: susmit.surwade@blenheimchalcot.com
+          SUBJECT: "Allure Report"
+        run: |
+          $securePassword = ConvertTo-SecureString $env:PASSWORD -AsPlainText -Force
+          $credentials = New-Object System.Management.Automation.PSCredential ($env:USERNAME, $securePassword)
+          $emailBody = "Your Allure report is ready. You can access it here: https://your-domain.com/$env:BUILD_DEFINITIONNAME/$env:BUILD_BUILDID/allure"
+          Send-MailMessage -SmtpServer $env:SMTP_SERVER -Port $env:SMTP_PORT -UseSsl -Credential $credentials -From $env:FROM_EMAIL -To $env:TO_EMAIL -Subject $env:SUBJECT -Body $emailBody
