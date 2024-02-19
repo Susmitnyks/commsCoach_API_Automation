@@ -47,7 +47,7 @@ steps:
       $project = "SusmitDemo"
       $buildId = "$(Build.BuildId)"
 
-      $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
+      $url = "https://dev.azure.com/$organization/$project/_apis/resources/Containers/$buildId/Allure%20Report?itemPath=Allure%20Report%2Findex.html"
 
       $emailBody = "Please find the Allure report here: $url"
 
