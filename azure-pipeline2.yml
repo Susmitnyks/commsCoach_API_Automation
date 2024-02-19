@@ -1,13 +1,9 @@
 name: ABOTautomation
 
-on:
-  push:
-    branches:
-      - ABOTAutoPytest
-
 jobs:
   automation:
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/ABOTAutoPytest' # Restrict job to run only on specific branch
     steps:
       - name: install chrome
         run: |
@@ -63,13 +59,10 @@ jobs:
         env:
           SMTP_SERVER: smtp.gmail.com
           SMTP_PORT: 587
-          USERNAME: susmit.s.surwade@gmail.com
-          PASSWORD: ${{ secrets.EMAIL_PASSWORD }} # Email password stored in Azure Pipeline Secrets
+          USERNAME: ${{ secrets.EMAIL_USERNAME }}
+          PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
           FROM_EMAIL: susmit.s.surwade@gmail.com
-          TO_EMAIL: susmit.surwade@blenheimchalcot.com
+          TO_EMAIL: susmit.s.surwade@blenheimchalcot.com
           SUBJECT: "Allure Report"
         run: |
-          $securePassword = ConvertTo-SecureString $env:PASSWORD -AsPlainText -Force
-          $credentials = New-Object System.Management.Automation.PSCredential ($env:USERNAME, $securePassword)
-          $emailBody = "Your Allure report is ready. You can access it here: https://your-domain.com/$env:BUILD_DEFINITIONNAME/$env:BUILD_BUILDID/allure"
-          Send-MailMessage -SmtpServer $env:SMTP_SERVER -Port $env:SMTP_PORT -UseSsl -Credential $credentials -From $env:FROM_EMAIL -To $env:TO_EMAIL -Subject $env:SUBJECT -Body $emailBody
+          echo "Your Allure report is ready. You can access it here: https://your-domain.com/${{ github.workflow }}/allure" | mail -s "${SUBJECT}" -a "Content-type: text/html;" -S smtp="${SMTP_SERVER}:${SMTP_PORT}" -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="${USERNAME}" -S smtp-auth-password="${PASSWORD}" -r "${FROM_EMAIL}" "${TO_EMAIL}"
