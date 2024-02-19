@@ -1,9 +1,10 @@
-name: ABOTautomation
+    trigger:
+  branches:
+    include:
+      - main
 
-jobs:
-  automation:
-    runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/ABOTAutoPytest' # Restrict job to run only on specific branch
+pool:
+    vmImage: 'ubuntu-latest'
     steps:
       - name: install chrome
         run: |
