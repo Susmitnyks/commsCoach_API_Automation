@@ -1,4 +1,3 @@
-
 trigger:
   branches:
     include:
@@ -14,52 +13,38 @@ steps:
     addToPath: true
 
 - script: |
-    pip install pytest pytest-azurepipelines
-    pip install allure-pytest
-    pip install requests
+    pip install pytest
+    pip install pytest-html
   displayName: 'Install dependencies'
 
 - script: |
-    pytest test/ccportal_api_automation.py --alluredir=allure-results
-  displayName: 'Run API automation tests'
+    pytest ccportal_api_automation.py --html=report.html
+  displayName: 'Run pytest and generate HTML report'
 
-- script: |
-    sudo apt-get update
-    sudo apt-get install wget unzip -y
-    wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
-    unzip allure.zip -d /opt
-    export PATH=$PATH:/opt/allure-2.15.0/bin
-    allure generate allure-results --clean -o allure-report
-  displayName: 'Generate Allure report'
+- task: PublishTestResults@2
+  inputs:
+    testResultsFormat: 'JUnit'
+    testResultsFiles: '**/TEST-*.xml'
+    searchFolder: '$(System.DefaultWorkingDirectory)'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: 'allure-report'
-    artifactName: 'Allure Report'
-    publishLocation: 'Container'
-  displayName: 'Publish Allure report as artifact'
+    pathtoPublish: 'report.html'
+    artifactName: 'TestReport'
 
 - task: PowerShell@2
   inputs:
     targetType: 'inline'
     script: |
-      $organization = "susmitsurwade"
-      $project = "SusmitDemo"
-      $buildId = "$(Build.BuildId)"
-
-      $url = "https://dev.azure.com/$organization/$project/_apis/resources/Containers/$buildId/Allure%20Report?itemPath=Allure%20Report%2Findex.html"
-
-      $emailBody = "Please find the Allure report here: $url"
-
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
       $to = "susmit.surwade@blenheimchalcot.com"
-      $subject = "Allure Report"
-
       $username = "susmit.s.surwade@gmail.com"
-      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
-      $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
+      $password = "qzod ltfm nmav tqvw"
 
-      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
-  displayName: 'Send Email Notification'
+      $emailBody = "Please find the attached pytest HTML report."
+      $attachmentPath = "$(System.DefaultWorkingDirectory)/report.html"
+
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject "Test Report" -Body $emailBody -Attachments $attachmentPath -Credential (New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force)))
+  displayName: 'Send Email with attached HTML report'
