@@ -1,70 +1,68 @@
-    trigger:
+trigger:
   branches:
     include:
       - main
 
 pool:
-    vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
-    steps:
-      - name: install chrome
-        run: |
-          sudo -E apt -f install -y
-          sudo -E apt-get install -y wget
-          sudo -E wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          sudo -E apt-get install -y google-chrome-stable
-      - name: Set up Python 3.11.7
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.11.7"
+steps:
+  - task: InstallChrome@1
+    inputs:
+      version: 'latest'
 
-      - name: Checkout code
-        uses: actions/checkout@v2
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.11.7'
+      addToPath: true
 
-      - name: Install dependencies
-        run:
-          pip install --upgrade pip
-          pip install pytest
-          pip install allure-pytest
-          pip install typing_extensions==4.7.1 --upgrade
-          pip install selenium==4.17.0
-          pip install allure-pytest
-          pip install allure-python-commons==2.13.2
-          pip install -U deepeval
-          pip install telnetlib3
+  - checkout: self
 
-      - name: Install other dependencies
-        run: |
-          if [ -f "requirements.txt" ]; then
-            pip install -r requirements.txt
-          fi
+  - script: |
+      sudo -E apt -f install -y
+      sudo -E apt-get install -y wget
+      sudo -E wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+      sudo -E apt-get install -y google-chrome-stable
+    displayName: 'Install Chrome'
 
-      - name: Create reports directory
-        run: mkdir -p reports
+  - script: |
+      pip install --upgrade pip
+      pip install pytest
+      pip install allure-pytest
+      pip install typing_extensions==4.7.1 --upgrade
+      pip install selenium==4.17.0
+      pip install allure-pytest
+      pip install allure-python-commons==2.13.2
+      pip install -U deepeval
+      pip install telnetlib3
+    displayName: 'Install dependencies'
 
-      - name: Run tests and generate allure reports
-        run: |
-          cd Tests/
-          pytest --alluredir=../reports
+  - script: |
+      if [ -f "requirements.txt" ]; then
+        pip install -r requirements.txt
+      fi
+    displayName: 'Install other dependencies'
 
-      - name: Set Output
-        id: results
-        run: echo "::set-output name=artifactPath::reports"
+  - script: mkdir -p reports
+    displayName: 'Create reports directory'
 
-      - name: Upload test reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-reports
-          path: ${{ steps.results.outputs.artifactPath }}
+  - script: |
+      cd Tests/
+      pytest --alluredir=../reports
+    displayName: 'Run tests and generate allure reports'
 
-      - name: Send email with report URL
-        env:
-          SMTP_SERVER: smtp.gmail.com
-          SMTP_PORT: 587
-          USERNAME: ${{ secrets.EMAIL_USERNAME }}
-          PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
-          FROM_EMAIL: susmit.s.surwade@gmail.com
-          TO_EMAIL: susmit.s.surwade@blenheimchalcot.com
-          SUBJECT: "Allure Report"
-        run: |
-          echo "Your Allure report is ready. You can access it here: https://your-domain.com/${{ github.workflow }}/allure" | mail -s "${SUBJECT}" -a "Content-type: text/html;" -S smtp="${SMTP_SERVER}:${SMTP_PORT}" -S smtp-use-starttls -S smtp-auth=login -S smtp-auth-user="${USERNAME}" -S smtp-auth-password="${PASSWORD}" -r "${FROM_EMAIL}" "${TO_EMAIL}"
+  - task: PublishPipelineArtifact@1
+    inputs:
+      targetPath: 'reports'
+      artifact: 'test-reports'
+
+  - task: SendEmail@1
+    inputs:
+      smtpServer: 'smtp.gmail.com'
+      smtpPort: '587'
+      username: '$(EMAIL_USERNAME)'
+      password: '$(EMAIL_PASSWORD)'
+      fromEmail: 'susmit.s.surwade@gmail.com'
+      toEmail: 'susmit.s.surwade@blenheimchalcot.com'
+      subject: 'Allure Report'
+      body: 'Your Allure report is ready. You can access it here: https://your-domain.com/$(Build.DefinitionName)/$(Build.BuildId)/allure'
