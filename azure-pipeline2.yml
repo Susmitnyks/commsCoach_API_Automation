@@ -1,4 +1,4 @@
-trigger:
+ trigger:
   branches:
     include:
       - main
@@ -7,62 +7,58 @@ pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-  - task: InstallChrome@1
-    inputs:
-      version: 'latest'
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
 
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '3.11.7'
-      addToPath: true
+- script: |
+    pip install pytest pytest-azurepipelines
+    pip install allure-pytest
+    pip install requests
+  displayName: 'Install dependencies'
 
-  - checkout: self
+- script: |
+    pytest test/ccportal_api_automation.py --alluredir=allure-results
+  displayName: 'Run API automation tests'
 
-  - script: |
-      sudo -E apt -f install -y
-      sudo -E apt-get install -y wget
-      sudo -E wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-      sudo -E apt-get install -y google-chrome-stable
-    displayName: 'Install Chrome'
+- script: |
+    sudo apt-get update
+    sudo apt-get install wget unzip -y
+    wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
+    unzip allure.zip -d /opt
+    export PATH=$PATH:/opt/allure-2.15.0/bin
+    allure generate allure-results --clean -o allure-report
+  displayName: 'Generate Allure report'
 
-  - script: |
-      pip install --upgrade pip
-      pip install pytest
-      pip install allure-pytest
-      pip install typing_extensions==4.7.1 --upgrade
-      pip install selenium==4.17.0
-      pip install allure-pytest
-      pip install allure-python-commons==2.13.2
-      pip install -U deepeval
-      pip install telnetlib3
-    displayName: 'Install dependencies'
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'allure-report'
+    artifactName: 'Allure Report'
+    publishLocation: 'Container'
+  displayName: 'Publish Allure report as artifact'
 
-  - script: |
-      if [ -f "requirements.txt" ]; then
-        pip install -r requirements.txt
-      fi
-    displayName: 'Install other dependencies'
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      $organization = "susmitsurwade"
+      $project = "SusmitDemo"
+      $buildId = "$(Build.BuildId)"
 
-  - script: mkdir -p reports
-    displayName: 'Create reports directory'
+      $url = "$(System.CollectionUri)_apis/build/builds/$buildId/artifacts?artifactName=Allure%20Report&api-version=7.1-preview.5"
 
-  - script: |
-      cd Tests/
-      pytest --alluredir=../reports
-    displayName: 'Run tests and generate allure reports'
+      $emailBody = "Please find the Allure report here: $url"
 
-  - task: PublishPipelineArtifact@1
-    inputs:
-      targetPath: 'reports'
-      artifact: 'test-reports'
+      $smtpServer = "smtp.gmail.com"
+      $smtpPort = 587
+      $from = "susmit.s.surwade@gmail.com"
+      $to = "susmit.surwade@blenheimchalcot.com"
+      $subject = "Allure Report"
 
-  - task: SendEmail@1
-    inputs:
-      smtpServer: 'smtp.gmail.com'
-      smtpPort: '587'
-      username: '$(EMAIL_USERNAME)'
-      password: '$(EMAIL_PASSWORD)'
-      fromEmail: 'susmit.s.surwade@gmail.com'
-      toEmail: 'susmit.s.surwade@blenheimchalcot.com'
-      subject: 'Allure Report'
-      body: 'Your Allure report is ready. You can access it here: https://your-domain.com/$(Build.DefinitionName)/$(Build.BuildId)/allure'
+      $username = "susmit.s.surwade@gmail.com"
+      $password = ConvertTo-SecureString "qzod ltfm nmav tqvw" -AsPlainText -Force
+      $credentials = New-Object System.Management.Automation.PSCredential ($username, $password)
+
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -UseSsl -From $from -To $to -Subject $subject -Body $emailBody -Credential $credentials
+  displayName: 'Send Email Notification'
