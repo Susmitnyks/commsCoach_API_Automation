@@ -18,12 +18,10 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    pytest test/ccportal_api_automation.py --html=report.html
-    # Copy the CSS file to the artifact directory
-    cp assets/style.css $(Build.ArtifactStagingDirectory)/
-  displayName: 'Run pytest and generate HTML report'
+    pytest test/ccportal_api_automation.py --self-contained-html=report.html
+  displayName: 'Run pytest and generate self-contained HTML report'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '.'
+    pathtoPublish: 'report.html'
     artifactName: 'TestReport'
