@@ -26,3 +26,42 @@ steps:
   inputs:
     pathtoPublish: 'report.html'
     artifactName: 'TestReport'
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # SMTP configuration
+      $smtpServer = "smtp.gmail.com"
+      $smtpPort = 587
+      $from = "susmit.s.surwade@gmail.com"
+      $to = "susmit.surwade@blenheimchalcot.com"
+      
+      # Get today's date
+      $todayDate = Get-Date -Format "yyyy-MM-dd"
+      
+      # Set the email subject
+      $subject = "Daily API Automation report for $todayDate"
+
+      # SMTP credentials
+      $username = "susmit.s.surwade@gmail.com"
+      $password = "qzod ltfm nmav tqvw"
+      $organization = "susmitsurwade"
+      $project = "SusmitDemo"
+
+      # Email body
+      $emailBody = "Please find the attached pytest HTML report."
+
+      # Path to the HTML report
+      $attachmentPath = "$(System.DefaultWorkingDirectory)/report.html"
+
+      # Send email with attached HTML report
+      Send-MailMessage -SmtpServer $smtpServer `
+                       -Port $smtpPort `
+                       -From $from `
+                       -To $to `
+                       -Subject $subject `
+                       -Body $emailBody `
+                       -Attachments $attachmentPath `
+                       -Credential (New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force)))
+  displayName: 'Send Email with attached HTML report'
