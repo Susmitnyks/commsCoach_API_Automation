@@ -144,7 +144,7 @@ def test_listing_api_conversation_status_success_transcribed(page_number):
 
 
 def test_listing_api_Total_files_Count_less_than_10min():
-    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]=13%2F02%2F2024&filters[conversationType][0]=Voice&filters[duration][min]=00:00:00&filters[duration][max]=00:10:00&page=1&sort=-startDate"
+    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]={yesterday}&filters[conversationType][0]=Voice&filters[duration][min]=00:00:00&filters[duration][max]=00:10:00&page=1&sort=-startDate"
     payload = {}
     headers = {
         'Accept': 'application/json, text/plain, */*',
@@ -169,7 +169,7 @@ def test_listing_api_Total_files_Count_less_than_10min():
     print("\n Total Count of file with duration less than 10 mins on page 1 are: " + str(DCount))
 
 def test_listing_api_Total_files_Count_greater_than_10min():
-    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]=13%2F02%2F2024&filters[conversationType][0]=Voice&filters[duration][min]=00:10:00&filters[duration][max]=00:30:00&page=1&sort=-startDate"
+    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]={yesterday}&filters[conversationType][0]=Voice&filters[duration][min]=00:10:00&filters[duration][max]=00:30:00&page=1&sort=-startDate"
     payload = {}
     headers = {
         'Accept': 'application/json, text/plain, */*',
