@@ -98,7 +98,7 @@ def test_listing_api_total_files_count():
 
 # @pytest.mark.parametrize("page_number", range(1, test_listing_total_count() + 1))
 @pytest.mark.parametrize("page_number", range(1, 2))
-def test_listing_api_conversation_status_success_transcribed(page_number):
+def test_listing_api_conversation_status_success_transcribed_page_no(page_number):
     success_count = 0
     transcribed_count = 0
     url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[conversationType][0]=Voice&page={page_number}&sort=-startDate"
@@ -192,3 +192,83 @@ def test_listing_api_Total_files_Count_greater_than_10min():
     assert response.status_code == 200
     DCount = json_response["meta"]["total"]
     print("\n Total Count of file with duration greater than 10 mins are: " + str(DCount))
+
+def test_listing_api_Total_no_of_files_this_week():
+    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={(datetime.today() - timedelta(days=(datetime.today().weekday() - 0) % 7)).strftime('%d/%m/%Y')}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    json_response = json.loads(response.text)
+    assert response.status_code == 200
+    WCount = json_response["meta"]["total"]
+    print("\n This Week Total Count of file is " + str(WCount))
+
+def test_listing_api_Total_no_of_files_this_month():
+    url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={(datetime.today().replace(day=1)).strftime('%d/%m/%Y')}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    json_response = json.loads(response.text)
+    assert response.status_code == 200
+    MCount = json_response["meta"]["total"]
+    print("\n This Month Total Count of file is " + str(MCount))
+
+def test_conversation_detail_api_verify_Report_ready_status():
+    import requests
+    url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations/13238"
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    assert response.status_code == 200
+    json_response = json.loads(response.text)
+    reportready = json_response["status"]
+    print("status is "+reportready)
+    assert reportready=="report_ready"
+
+
+
