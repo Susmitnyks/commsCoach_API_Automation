@@ -189,7 +189,7 @@ def test_send_mail():
 
     # Recipient email address
     #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
@@ -208,7 +208,7 @@ def test_send_mail():
     body = f"""
     <html>
       <body>
-        <p><b>Files count showing on PRODUCTION CommsCoach portal today as below:</b></p>
+        <p><b>Files count showing on PRODUCTION CommsCoach portal on {today_date} as below:</b></p>
         <ul>
           <li>Organisation: Oakbrook</li>
           <li>Total Files Received in Azure blob storage: {azure_count}</li>
