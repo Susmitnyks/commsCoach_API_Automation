@@ -33,7 +33,7 @@ final_azure_count = 0
 
 # access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwNzExNTk5MiwiZXhwIjoxNzA3MTE5NTkyLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.N-3d3dz02z9Uvsrl2sPK-gwsA8UL2Q6-iuVNsqSCQ_W3i1YuM7EzOHLNzxrNy64dr1N-EBpyUErRuxzMzX50_GrC96b-dH6AVD6khy56YjU5bIXae0sO-aQOoG3UTFu2EJAEGAIiA9dtDyqpXzzyfZsfNB8JxpYuZ_5NN26PPMgZPqAQCISRnLJ8sWqAhi4DEuHm0qtT37ds-tCvFODlPZr2MGYVPe2xEvP_PbVFiAXrHcGPTdfd2iAWnI6Pyoz7Ica-1Rb7DcuWtQgSHSBE4NawXdCKDJTU1rjqwARJ9feefTWGScF-2bgkCm-OzDbWuMCTW_EjHqQz-__EYCNs1w"
 
-def test_refresh_token():
+def test_refresh_token_api():
     #delete_files_with_extensions(folder_path, extensions_to_delete)
     global access_token
     url = "https://securetoken.googleapis.com/v1/token?key=AIzaSyCz1XmsF38COosTR5crCZh8p8ZsAVCaNgM"
@@ -67,7 +67,7 @@ def test_refresh_token():
 
 def test_listing_api_total_files_count():
     global TCount
-    access_token = test_refresh_token()
+    access_token = test_refresh_token_api()
     global page_no
     url = gurl
     payload = {}
@@ -166,7 +166,7 @@ def test_listing_api_Total_files_Count_less_than_10min():
     json_response = json.loads(response.text)
     assert response.status_code == 200
     DCount = json_response["meta"]["total"]
-    print("\n Total Count of file with duration less than 10 mins on page 1 are: " + str(DCount))
+    print("\n Total Count of file with duration less than 10 mins are: " + str(DCount))
 
 def test_listing_api_Total_files_Count_greater_than_10min():
     url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]={yesterday}&filters[conversationType][0]=Voice&filters[duration][min]=00:10:00&filters[duration][max]=00:30:00&page=1&sort=-startDate"
@@ -191,4 +191,4 @@ def test_listing_api_Total_files_Count_greater_than_10min():
     json_response = json.loads(response.text)
     assert response.status_code == 200
     DCount = json_response["meta"]["total"]
-    print("\n Total Count of file with duration greater than 10 mins on page 1 are: " + str(DCount))
+    print("\n Total Count of file with duration greater than 10 mins are: " + str(DCount))
