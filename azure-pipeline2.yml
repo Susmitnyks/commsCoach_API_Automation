@@ -15,6 +15,7 @@ steps:
 - script: |
     pip install pytest
     pip install pytest-html
+    pip install requests  # Added requests module installation
   displayName: 'Install dependencies'
 
 - script: |
