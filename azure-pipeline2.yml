@@ -35,13 +35,13 @@ steps:
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
-      $to = "susmit.surwade@blenheimchalcot.com"
+      $to = "susmit.surwade@blenheimchalcot.com,ruksar.khan@blenheimchalcot.com,ami.jambusaria@blenheimchalcot.com"
 
       # Get today's date
       $todayDate = Get-Date -Format "dd-MM-yyyy"
 
       # Set the email subject
-      $subject = "Daily API Automation report for $todayDate"
+      $subject = "Daily Production API Automation report for $todayDate"
 
       # SMTP credentials
       $username = "susmit.s.surwade@gmail.com"
@@ -50,7 +50,7 @@ steps:
       $project = "SusmitDemo"
 
       # Email body
-      $emailBody = "Please find the attached pytest HTML report."
+      $emailBody = "Please find the attached pytest api execution report."
 
       # Path to the HTML report
       $attachmentPath = "$(System.DefaultWorkingDirectory)/report.html"
