@@ -31,7 +31,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      # SMTP configuration
+      # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
@@ -55,13 +55,8 @@ steps:
       # Path to the HTML report
       $attachmentPath = "$(System.DefaultWorkingDirectory)/report.html"
 
-      # Send email with attached HTML report
-      Send-MailMessage -SmtpServer $smtpServer `
-                       -Port $smtpPort `
-                       -From $from `
-                       -To $to `
-                       -Subject $subject `
-                       -Body $emailBody `
-                       -Attachments $attachmentPath `
-                       -Credential (New-Object System.Management.Automation.PSCredential ($username, (ConvertTo-SecureString $password -AsPlainText -Force)))
+      # Send email with attached HTML report using TLS/SSL
+      $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+      $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
   displayName: 'Send Email with attached HTML report'
