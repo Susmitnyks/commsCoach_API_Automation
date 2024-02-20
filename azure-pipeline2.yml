@@ -19,16 +19,12 @@ steps:
   displayName: 'Install dependencies'
 
 - script: |
-    # Get today's date
-    $todayDate = Get-Date -Format "yyyyMMdd"
-
-    # Run pytest and generate self-contained HTML report with today's date in the filename
-    pytest test/ccportal_api_automation.py --html=report_$todayDate.html --self-contained-html
+    pytest test/ccportal_api_automation.py --html=report.html --self-contained-html
   displayName: 'Run pytest and generate self-contained HTML report'
 
 - task: PublishBuildArtifacts@1
   inputs:
-    pathtoPublish: '$(System.DefaultWorkingDirectory)'
+    pathtoPublish: 'report.html'
     artifactName: 'TestReport'
 
 - task: PowerShell@2
@@ -40,10 +36,10 @@ steps:
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
       $to = "susmit.surwade@blenheimchalcot.com"
-      
+
       # Get today's date
       $todayDate = Get-Date -Format "yyyy-MM-dd"
-      
+
       # Set the email subject
       $subject = "Daily API Automation report for $todayDate"
 
@@ -57,7 +53,7 @@ steps:
       $emailBody = "Please find the attached pytest HTML report."
 
       # Path to the HTML report
-      $attachmentPath = "$(System.DefaultWorkingDirectory)/report_$todayDate.html"
+      $attachmentPath = "$(System.DefaultWorkingDirectory)/report.html"
 
       # Send email with attached HTML report using TLS/SSL
       $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
