@@ -38,7 +38,7 @@ steps:
       $to = "susmit.surwade@blenheimchalcot.com"
 
       # Get today's date
-      $todayDate = Get-Date -Format "yyyy-MM-dd"
+      $todayDate = Get-Date -Format "dd-MM-yyyy"
 
       # Set the email subject
       $subject = "Daily API Automation report for $todayDate"
