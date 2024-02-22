@@ -300,3 +300,28 @@ def test_conversation_detail_api_verify_In_Progress_status():
     In_progress = json_response["status"]
     print("status is " + In_progress)
     assert In_progress == "in_progress"
+@pytest.mark.skip(reason="Skipping this test")
+def test_conversation_detail_api_verify_Transcription_Data():
+    import requests
+    url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations/13223"
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    assert response.status_code == 200
+    json_response = json.loads(response.text)
+    assert len(json.loads(response.text)["messages"]) > 0
