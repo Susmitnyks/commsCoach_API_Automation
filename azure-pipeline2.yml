@@ -35,7 +35,8 @@ steps:
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
-      $to = @("susmit.surwade@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com", "ami.jambusaria@blenheimchalcot.com")
+      # $to = @("susmit.surwade@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com", "ami.jambusaria@blenheimchalcot.com")
+      $to = @("susmit.surwade@blenheimchalcot.com")
 
       # Get today's date
       $todayDate = Get-Date -Format "dd-MM-yyyy"
