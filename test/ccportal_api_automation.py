@@ -270,6 +270,7 @@ def test_conversation_detail_api_verify_Report_ready_status():
     assert response.status_code == 200
     json_response = json.loads(response.text)
     reportready = json_response["status"]
+    print("API INFO: Verification if we are receiving Report_ready status.")
     print("status is " + reportready)
     assert reportready == "report_ready"
 
@@ -298,9 +299,10 @@ def test_conversation_detail_api_verify_In_Progress_status():
     assert response.status_code == 200
     json_response = json.loads(response.text)
     In_progress = json_response["status"]
+    print("API INFO: Verification if we are receiving In-progress status.")
     print("status is " + In_progress)
     assert In_progress == "in_progress"
-@pytest.mark.skip(reason="Skipping this test")
+#@pytest.mark.skip(reason="Skipping this test")
 def test_conversation_detail_api_verify_Transcription_Data():
     import requests
     url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations/13223"
@@ -322,6 +324,8 @@ def test_conversation_detail_api_verify_Transcription_Data():
     }
 
     response = requests.request("GET", url, headers=headers, data=payload)
+    print("API INFO : Verification if we are receiving Transcription Data in API once file is being transcripted")
     assert response.status_code == 200
     json_response = json.loads(response.text)
     assert len(json.loads(response.text)["messages"]) > 0
+
