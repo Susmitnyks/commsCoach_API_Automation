@@ -329,3 +329,34 @@ def test_conversation_detail_api_verify_Transcription_Data():
     json_response = json.loads(response.text)
     assert len(json.loads(response.text)["messages"]) > 0
 
+
+def test_listing_api_Agent_name_Filter():
+
+    url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]=01%2F02%2F2024&filters[endDate]=01%2F02%2F2024&filters[agentName]=Benecia+Solan&page=1&sort=-startDate"
+
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    print("API INFO : Verification if Agent name Filter is working Fine")
+    assert response.status_code == 200
+    json_response = json.loads(response.text)
+    agent_name=json_response["data"][0]["agent_name"]
+    ACount = json_response["meta"]["total"]
+    assert agent_name=="Benecia Solan"
+    assert ACount==35
+
