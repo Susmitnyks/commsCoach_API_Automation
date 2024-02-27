@@ -386,3 +386,31 @@ def test_listing_api_Verify_Overall_quality_filter():
     json_response = json.loads(response.text)
     DCount = json_response["meta"]["total"]
     assert DCount == 10
+
+def test_listing_api_Verify_agreement_number_filter():
+
+    url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]=08%2F02%2F2024&filters[endDate]=08%2F02%2F2024&filters[agreementNumber]=1300588598&page=1&sort=-startDate"
+
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImExODE4ZjQ0ODk0MjI1ZjQ2MWQyMmI1NjA4NDcyMDM3MTc2MGY1OWIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwOTA0MTIyMiwiZXhwIjoxNzA5MDQ0ODIyLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.G6_n-ZMRakPYAd3WsfEXi4OnLponSVzEu9AnQqQp6s3hZuHhjz6TlwOpNLxwG4PWZkExSXAYA5ZZBpL85Rz7cljZXPRvI-gW6okQtfIOfvaOJ8xkXHuPKRxVVA5se1fgi673hUYRoDCthAB4CkRXHY9OijXPpgD6t6H7SeRbfpIlrJp7i3Vhy0VF1i9EP0Hd0Qt-Ct5cthUcSpx_crGvoYGH2hTRnaMO5vtSy_F2-lJJPgFDtL3xT6CNtPYT2eMXpWTFo3nVr0YFN7t9RFpo80l3NTYmvm0wifQS1V12UY0wgfY1lS3HtazO7PXlalhrw5D-XMO4X5QT_FXS9y_MmQ',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    print("API INFO : Verification if agreement number Filter is working Fine")
+    assert response.status_code == 200
+    json_response = json.loads(response.text)
+    agreement_no = json_response["data"][0]["agreement_number"]
+    assert agreement_no=='1300588598'
