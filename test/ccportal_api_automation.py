@@ -360,3 +360,29 @@ def test_listing_api_Agent_name_Filter():
     assert agent_name=="Benecia Solan"
     assert ACount==35
 
+def test_listing_api_Verify_Overall_quality_filter():
+    url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]=20%2F01%2F2024&filters[endDate]=20%2F01%2F2024&filters[over_all_score][min]=1&filters[over_all_score][max]=60&page=1&sort=-startDate"
+
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Not A(Brand";v="99", "Google Chrome";v="121", "Chromium";v="121"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    print("API INFO : Verification if Overall quality Filter is working Fine , checked for 1-60%")
+    assert response.status_code == 200
+    json_response = json.loads(response.text)
+    DCount = json_response["meta"]["total"]
+    assert DCount == 10
