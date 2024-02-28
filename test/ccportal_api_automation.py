@@ -395,7 +395,7 @@ def test_listing_api_Verify_agreement_number_filter():
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6ImExODE4ZjQ0ODk0MjI1ZjQ2MWQyMmI1NjA4NDcyMDM3MTc2MGY1OWIiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwOTA0MTIyMiwiZXhwIjoxNzA5MDQ0ODIyLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.G6_n-ZMRakPYAd3WsfEXi4OnLponSVzEu9AnQqQp6s3hZuHhjz6TlwOpNLxwG4PWZkExSXAYA5ZZBpL85Rz7cljZXPRvI-gW6okQtfIOfvaOJ8xkXHuPKRxVVA5se1fgi673hUYRoDCthAB4CkRXHY9OijXPpgD6t6H7SeRbfpIlrJp7i3Vhy0VF1i9EP0Hd0Qt-Ct5cthUcSpx_crGvoYGH2hTRnaMO5vtSy_F2-lJJPgFDtL3xT6CNtPYT2eMXpWTFo3nVr0YFN7t9RFpo80l3NTYmvm0wifQS1V12UY0wgfY1lS3HtazO7PXlalhrw5D-XMO4X5QT_FXS9y_MmQ',
+        'Authorization': f'Bearer {access_token}',
         'Connection': 'keep-alive',
         'Origin': 'https://comms-coach.englishscore.com',
         'Referer': 'https://comms-coach.englishscore.com/',
@@ -423,7 +423,7 @@ def test_listing_api_Conversation_type_filter_Email_Voice_Chat():
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjNiYjg3ZGNhM2JjYjY5ZDcyYjZjYmExYjU5YjMzY2M1MjI5N2NhOGQiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4NjE4MzEsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwOTEyNjE5MCwiZXhwIjoxNzA5MTI5NzkwLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.svvR9O8tV3LF-qfBD9pFx4szMrH9AIkApBh1ZTM1DziF-oPVTUd3PXWZnUUwJAZW1G1LGOEJASN0G9qGShUe_wAD4Al6xU--sv2g8aydlh4tc6icF-d_hPQSCmcHEoIQNg3UMpRfapbQFruSQv-3mKMoczo5lUVcG4r6z3er9eZ-nybEh6ZSf9QaW_K0SLBtY-c5cxvSYWvCVAg5tz11v79V0I544n_XWdoDUqM3BvS7tUTmMFzfxXgTVuq9AqqkW5BfaciOPoYoK3aqfNlllVn9cez9SPltoomLejP4FPyJQ0NkUwjKnCaUvBxoNHeEP4lKX0xfMzuxwuRgppBaPA',
+        'Authorization': f'Bearer {access_token}',
         'Connection': 'keep-alive',
         'Origin': 'https://comms-coach-stage.englishscore.com',
         'Referer': 'https://comms-coach-stage.englishscore.com/',
@@ -449,7 +449,7 @@ def test_listing_api_Conversation_type_filter_Email_Voice_Chat():
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjNiYjg3ZGNhM2JjYjY5ZDcyYjZjYmExYjU5YjMzY2M1MjI5N2NhOGQiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4NjE4MzEsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwOTEyNjE5MCwiZXhwIjoxNzA5MTI5NzkwLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.svvR9O8tV3LF-qfBD9pFx4szMrH9AIkApBh1ZTM1DziF-oPVTUd3PXWZnUUwJAZW1G1LGOEJASN0G9qGShUe_wAD4Al6xU--sv2g8aydlh4tc6icF-d_hPQSCmcHEoIQNg3UMpRfapbQFruSQv-3mKMoczo5lUVcG4r6z3er9eZ-nybEh6ZSf9QaW_K0SLBtY-c5cxvSYWvCVAg5tz11v79V0I544n_XWdoDUqM3BvS7tUTmMFzfxXgTVuq9AqqkW5BfaciOPoYoK3aqfNlllVn9cez9SPltoomLejP4FPyJQ0NkUwjKnCaUvBxoNHeEP4lKX0xfMzuxwuRgppBaPA',
+        'Authorization': f'Bearer {access_token}',
         'Connection': 'keep-alive',
         'Origin': 'https://comms-coach-stage.englishscore.com',
         'Referer': 'https://comms-coach-stage.englishscore.com/',
@@ -475,7 +475,7 @@ def test_listing_api_Conversation_type_filter_Email_Voice_Chat():
     headers = {
         'Accept': 'application/json, text/plain, */*',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsImtpZCI6IjNiYjg3ZGNhM2JjYjY5ZDcyYjZjYmExYjU5YjMzY2M1MjI5N2NhOGQiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4NjE4MzEsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwOTEyNjE5MCwiZXhwIjoxNzA5MTI5NzkwLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.svvR9O8tV3LF-qfBD9pFx4szMrH9AIkApBh1ZTM1DziF-oPVTUd3PXWZnUUwJAZW1G1LGOEJASN0G9qGShUe_wAD4Al6xU--sv2g8aydlh4tc6icF-d_hPQSCmcHEoIQNg3UMpRfapbQFruSQv-3mKMoczo5lUVcG4r6z3er9eZ-nybEh6ZSf9QaW_K0SLBtY-c5cxvSYWvCVAg5tz11v79V0I544n_XWdoDUqM3BvS7tUTmMFzfxXgTVuq9AqqkW5BfaciOPoYoK3aqfNlllVn9cez9SPltoomLejP4FPyJQ0NkUwjKnCaUvBxoNHeEP4lKX0xfMzuxwuRgppBaPA',
+        'Authorization': f'Bearer {access_token}',
         'Connection': 'keep-alive',
         'Origin': 'https://comms-coach-stage.englishscore.com',
         'Referer': 'https://comms-coach-stage.englishscore.com/',
