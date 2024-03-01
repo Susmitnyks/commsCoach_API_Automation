@@ -62,7 +62,7 @@ def test_azure_blob_count():
     account_key = "NlaxHb6fioxyYAWOUFhCli4QLRoiPDmTXPrKNuSij+mNQdC+N8WNQxsyRke5xaeM2TGT5R1PWBcz+AStDXnptw=="
     container_name = "oakbrook"
     # Specify the search string "yyyymmdd"
-    search_string = (datetime.now() - timedelta(days=0)).strftime("%Y%m%d")
+    search_string = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")
 
     # Get the count of files containing the search string
     afile_count = count_files_with_string(account_name, account_key, container_name, search_string)
@@ -189,8 +189,8 @@ def test_send_mail():
     smtp_password = "qzod ltfm nmav tqvw"
 
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
