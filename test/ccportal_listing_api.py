@@ -213,23 +213,23 @@ def test_send_mail():
         <table border="1">
             <tr>
                 <td>Organisation:</td>
-                <td>Oakbrook</td>
+                <td style="text-align: center;">Oakbrook</td>
             </tr>
             <tr>
                 <td>Total Files Received in Azure blob storage:</td>
-                <td>{azure_count}</td>
+                <td style="text-align: center;">{azure_count}</td>
             </tr>
             <tr>
                 <td>Total Files Received in CMS:</td>
-                <td>{total_count}</td>
+                <td style="text-align: center;">{total_count}</td>
             </tr>
             <tr>
                 <td>Total Evaluations Reports Ready:</td>
-                <td>{success_count}</td>
+                <td style="text-align: center;">{success_count}</td>
             </tr>
             <tr>
                 <td>Total Evaluations In progress:</td>
-                <td>{transcribed_count}</td>
+                <td style="text-align: center;">{transcribed_count}</td>
             </tr>
         </table>
       </body>
