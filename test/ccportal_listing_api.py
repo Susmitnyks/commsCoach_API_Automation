@@ -190,8 +190,8 @@ def test_send_mail():
     smtp_password = "qzod ltfm nmav tqvw"
 
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
@@ -204,19 +204,34 @@ def test_send_mail():
     #today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
 
     # Create the email message
-    subject = f"Daily Report: Files Count Monitoring (12AM - 11:59PM) - {today_date}"
+    subject = f"Daily Report: Voice Files Count Monitoring (12AM - 11:59PM) - {today_date}(IST)"
     # body = f" Files received in CMS today as below: \n Organisation: Oakbrook \n Total Count: {total_count}\n Success Count: {success_count}\n Failed Count: {failed_count}\n Transcribed Count: {transcribed_count} "
     body = f"""
     <html>
       <body>
-        <p><b>Files count showing on PRODUCTION Brocaly portal on {today_date} as below:</b></p>
-        <ul>
-          <li>Organisation: Oakbrook</li>
-          <li>Total Files Received in Azure blob storage: {azure_count}</li>
-          <li>Total Files Received in CMS: {total_count}</li>
-          <li>Total Evaluations Reports Ready: {success_count }</li>
-          <li>Total Evaluations In progress: {transcribed_count}</li>
-        </ul>
+        <p><b>Voice Files count showing on PRODUCTION Brocaly portal on {today_date}(IST) as below:</b></p>
+        <table border="1">
+            <tr>
+                <td>Organisation:</td>
+                <td>Oakbrook</td>
+            </tr>
+            <tr>
+                <td>Total Files Received in Azure blob storage:</td>
+                <td>{azure_count}</td>
+            </tr>
+            <tr>
+                <td>Total Files Received in CMS:</td>
+                <td>{total_count}</td>
+            </tr>
+            <tr>
+                <td>Total Evaluations Reports Ready:</td>
+                <td>{success_count}</td>
+            </tr>
+            <tr>
+                <td>Total Evaluations In progress:</td>
+                <td>{transcribed_count}</td>
+            </tr>
+        </table>
       </body>
     </html>
     """
