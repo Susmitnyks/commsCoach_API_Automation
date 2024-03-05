@@ -190,8 +190,8 @@ def test_send_mail():
     smtp_password = "qzod ltfm nmav tqvw"
 
     # Recipient email address
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    #recipient_emails = ["rinkesh.das@englishscore.com","ami.jambusaria@englishscore.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    recipient_emails = ["rinkesh.das@englishscore.com","ami.jambusaria@englishscore.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
