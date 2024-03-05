@@ -199,7 +199,7 @@ def test_send_mail():
     transcribed_count = final_transcribed_count
     azure_count = afile_count
 
-    # Format today's date
+    # Format for today's date
     #today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     #today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
 
