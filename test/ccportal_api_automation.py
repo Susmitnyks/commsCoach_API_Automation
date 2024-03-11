@@ -494,3 +494,32 @@ def test_listing_api_Conversation_type_filter_Email_Voice_Chat():
     json_response = json.loads(response.text)
     DCount = json_response["meta"]["total"]
     assert DCount == 2
+
+def test_listing_api_vulnerability_recognise_yes():
+    import requests
+
+    url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]=08%2F02%2F2024&filters[endDate]=08%2F02%2F2024&filters[section_1_subsection_1_goal_1_goal_name][0]=Yes&page=1&sort=-startDate"
+
+    payload = {}
+    headers = {
+        'Accept': 'application/json, text/plain, */*',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': f'Bearer {access_token}',
+        'Connection': 'keep-alive',
+        'Origin': 'https://comms-coach.englishscore.com',
+        'Referer': 'https://comms-coach.englishscore.com/',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-site',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+
+    response = requests.request("GET", url, headers=headers, data=payload)
+    print("API INFO : Verification if vulnerability_recognise_yes Filter is working Fine.")
+    assert response.status_code == 200
+    json_response = json.loads(response.text)
+    DCount = json_response["meta"]["total"]
+    assert DCount == 11
