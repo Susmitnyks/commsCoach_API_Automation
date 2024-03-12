@@ -1,5 +1,6 @@
 import json
 import smtplib
+from email.utils import formataddr
 import pytest
 import requests
 import pytz
@@ -50,7 +51,7 @@ def count_files_with_string(account_name, account_key, container_name, search_st
 
 
 # if __name__ == "__main__":
-# @pytest.mark.skip()
+#@pytest.mark.skip()
 def test_azure_blob_count():
     global afile_count
     # Replace these with your Azure Storage account details
@@ -132,7 +133,7 @@ def test_listing_total_count():
 
 
 @pytest.mark.parametrize("page_number", range(1, test_listing_total_count() + 1))
-# @pytest.mark.parametrize("page_number", range(1, 3))
+#@pytest.mark.parametrize("page_number", range(1, 2))
 def test_listing_sucess_fail_records(page_number):
     success_count = 0
     transcribed_count = 0
@@ -184,28 +185,31 @@ def test_print_counts():
 
 
 def test_send_mail():
-    # Your email configuration
-    smtp_server = "smtp.gmail.com"
-    smtp_port = 587
-    smtp_username = "susmit.s.surwade@gmail.com"
-    smtp_password = "qzod ltfm nmav tqvw"
+    # AWS SMTP credentials
+    smtp_username = 'AKIA5YBB6OJ66G2MXV7B'
+    smtp_password = 'BMX8OsOi7Gy4OLgEsaKvyICJQbDOYv8XVEHtE2DGcLIE'
+    smtp_hostname = 'email-smtp.eu-west-1.amazonaws.com'
+    smtp_port = 587  # Adjust the port if necessary
 
+    # Sender and recipient email addresses
+    sender_email = 'support@englishscore.com'
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
     success_count = final_success_count
     transcribed_count = final_transcribed_count
     azure_count = afile_count
+    #azure_count = 5
 
-    # Format for today's date
-    # today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    # today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
+    # Create message container
+    msg = MIMEMultipart()
+    msg['From'] = formataddr(('Sender Name', sender_email))
+    msg['To'] = ', '.join(recipient_emails)
+    msg['Subject'] = f"Daily Report: Voice Files Count Monitoring (12AM - 11:59PM) - {today_date} IST"
 
-    # Create the email message
-    subject = f"Daily Report: Voice Files Count Monitoring (12AM - 11:59PM) - {today_date} IST"
     # body = f" Files received in CMS today as below: \n Organisation: Oakbrook \n Total Count: {total_count}\n Success Count: {success_count}\n Failed Count: {failed_count}\n Transcribed Count: {transcribed_count} "
     body = f"""
     <html>
@@ -237,19 +241,27 @@ def test_send_mail():
     </html>
     """
 
-    message = MIMEMultipart()
-    message["From"] = smtp_username
-    # message["To"] = recipient_email
-    message['To'] = ', '.join(recipient_emails)
-    message["Subject"] = subject
-    message.attach(MIMEText(body, "html"))
+    # Attach body to the email
+    msg.attach(MIMEText(body, 'html'))
 
-    # Connect to the SMTP server and send the email
-    with smtplib.SMTP(smtp_server, smtp_port) as server:
+    try:
+        # Establish a secure connection with the SMTP server
+        server = smtplib.SMTP(smtp_hostname, smtp_port)
         server.starttls()
+
+        # Login with your SMTP credentials
         server.login(smtp_username, smtp_password)
-        # server.sendmail(smtp_username, recipient_email, message.as_string())
-        for recipient_email in recipient_emails:
-            server.sendmail(smtp_username, recipient_email, message.as_string())
-    print("\n Email sent successfully.")
+
+        # Send the email
+        server.sendmail(sender_email, recipient_emails, msg.as_string())
+
+        print('Email sent successfully!')
+
+    except Exception as e:
+        print('Error: Unable to send email.')
+        print(e)
+
+    finally:
+        # Close the SMTP server connection
+        server.quit()
 
