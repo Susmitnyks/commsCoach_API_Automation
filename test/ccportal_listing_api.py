@@ -192,7 +192,7 @@ def test_send_mail():
     smtp_port = 587  # Adjust the port if necessary
 
     # Sender and recipient email addresses
-    sender_email = 'support@englishscore.com'
+    sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
     #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
     recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
