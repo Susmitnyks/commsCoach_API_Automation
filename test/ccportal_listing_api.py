@@ -4,7 +4,7 @@ from email.utils import formataddr
 import pytest
 import requests
 import pytz
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from email.mime.application import MIMEApplication
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
@@ -12,7 +12,7 @@ from azure.storage.blob import BlobServiceClient
 
 yesterday = (datetime.now().date() - timedelta(days=1)).strftime("%d/%m/%Y")  # Keep 1 Day before date ie day=1
 today_date = (datetime.now(pytz.timezone('Asia/Kolkata')) - timedelta(days=0)).strftime("%d-%m-%Y %H:%M:%S")  # Keep today's Day before date ie day=0
-search_string = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")  # Keep 1 Day before date ie day=1
+#search_string = (datetime.now() - timedelta(days=1)).strftime("%Y%m%d")  # Keep 1 Day before date ie day=1
 # token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY5NjI5NzU5NmJiNWQ4N2NjOTc2Y2E2YmY0Mzc3NGE3YWE5OTMxMjkiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwNzA3NDMyNCwiZXhwIjoxNzA3MDc3OTI0LCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.k32njBhaAYv0zM6vSXIcxEVqXsQSja4bbd4PM2I5bChb1kvJjCa9K3qRMamp8KaWEZYcbNOGpSegwt_MCU3dKHOVLokZcafb13WyfbEyy90bQTcCNoI9rf_WmExZfs_foF5Q8NG5dg1reFHoQAWjxyMMzBBfjnBTbvbgj8DqDg-RiOhLZAqoMy3AQuCAdYbELuWl_PP3yeAxxuBEGKn4vDIuO2CwGtIjL9GD0Xbat_K0GsWNhRroN4vLN0RMFp186MRS2SwhM6DvC9btO_NPgb5efAh8pqb0zSdd8vw9tOG0D5b-Xr-YVVG2kEtvt_2TTz2mu1bp-BiDaKkh-OE4mA"
 gurl = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]={yesterday}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
 
@@ -23,52 +23,45 @@ final_azure_count = 0
 
 # access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwNzExNTk5MiwiZXhwIjoxNzA3MTE5NTkyLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.N-3d3dz02z9Uvsrl2sPK-gwsA8UL2Q6-iuVNsqSCQ_W3i1YuM7EzOHLNzxrNy64dr1N-EBpyUErRuxzMzX50_GrC96b-dH6AVD6khy56YjU5bIXae0sO-aQOoG3UTFu2EJAEGAIiA9dtDyqpXzzyfZsfNB8JxpYuZ_5NN26PPMgZPqAQCISRnLJ8sWqAhi4DEuHm0qtT37ds-tCvFODlPZr2MGYVPe2xEvP_PbVFiAXrHcGPTdfd2iAWnI6Pyoz7Ica-1Rb7DcuWtQgSHSBE4NawXdCKDJTU1rjqwARJ9feefTWGScF-2bgkCm-OzDbWuMCTW_EjHqQz-__EYCNs1w"
 
-
-def count_files_with_string(account_name, account_key, container_name, search_string):
-    connection_string = f"DefaultEndpointsProtocol=https;AccountName={account_name};AccountKey={account_key};EndpointSuffix=core.windows.net"
-
-    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-    container_client = blob_service_client.get_container_client(container_name)
-
-    # Initialize count variable
-    file_count = 0
-
-    # List blobs in the container
-    blobs = container_client.list_blobs()
-
-    # Iterate over blobs and count those containing the search string
-    for blob in blobs:
-        name = blob.name
-        if search_string in blob.name and name.endswith('.wav'):
-            file_count += 1
-    return file_count
-
-    # target_date = datetime.now().replace(tzinfo=None)-timedelta(days=1)
-    # for blob in blobs:
-    # if blob.creation_time and blob.creation_time.replace(tzinfo=None) > target_date:
-    # file_count += 1
-    # return file_count
-
-
-# if __name__ == "__main__":
-#@pytest.mark.skip()
-def test_azure_blob_count():
+def test_Azure_file_counts(account_name, account_key, container_name, modified_date):
     global afile_count
-    # Replace these with your Azure Storage account details
+    try:
+        file_count = 0
 
-    # account_name = "susmit"
-    # account_key = "B5gjKGSC0QK8TvPkWvKFSx6+8RbJ6sPwgDQgztIEIodwiekA6yO/eVy+htOBbKGEBsV3SX381Jrh+AStoAR/eA=="
-    # container_name = "susmitcont"
+        from azure.storage.blob import BlobServiceClient
 
-    account_name = "escommscoachinbound"
-    account_key = "NlaxHb6fioxyYAWOUFhCli4QLRoiPDmTXPrKNuSij+mNQdC+N8WNQxsyRke5xaeM2TGT5R1PWBcz+AStDXnptw=="
-    container_name = "oakbrook"
-    # Specify the search string "yyyymmdd"
+        connection_string = f"DefaultEndpointsProtocol=https;AccountName={account_name};AccountKey={account_key};EndpointSuffix=core.windows.net"
+        blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+        container_client = blob_service_client.get_container_client(container_name)
 
-    # Get the count of files containing the search string
-    afile_count = count_files_with_string(account_name, account_key, container_name, search_string)
-    print(f"\n Number of files uploaded on Azure are : {afile_count}")
+        blobs = container_client.list_blobs()
 
+        modified_date = datetime.fromisoformat(modified_date)
+
+        for blob in blobs:
+            last_modified = blob.last_modified
+            if last_modified:
+                if last_modified >= modified_date.replace(tzinfo=timezone.utc):
+                    file_count += 1
+
+        return file_count / 2
+    except Exception as e:
+        print(e)
+
+        # Example usage:
+        account_name = "escommscoachinbound"
+        account_key = "NlaxHb6fioxyYAWOUFhCli4QLRoiPDmTXPrKNuSij+mNQdC+N8WNQxsyRke5xaeM2TGT5R1PWBcz+AStDXnptw=="
+        container_name = "oakbrook"
+        today_date = (datetime.now() - timedelta(days=1)).strftime("%d/%m/%Y")
+        date_str = f"{today_date}, 18:31:00"
+        #date_str = "13/03/2024, 18:31:00"
+        date_format = "%d/%m/%Y, %H:%M:%S"
+        parsed_date = datetime.strptime(date_str, date_format)
+        modified_date = parsed_date.isoformat()
+        #modified_date_str = "28/02/2024, 11:47:30" # March 13, 2024, 12:00 AM in ISO 8601 format
+        #modified_date = datetime.fromisoformat(modified_date_str)
+        count = test_Azure_file_counts(account_name, account_key, container_name, modified_date)
+        afile_count=int(count)
 
 def test_refresh_token():
     global access_token
@@ -195,8 +188,8 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
@@ -207,7 +200,7 @@ def test_send_mail():
 
     # Create message container
     msg = MIMEMultipart()
-    msg['From'] = formataddr(('Sender Name', sender_email))
+    msg['From'] = formataddr(('Brocaly Support', sender_email))
     msg['To'] = ', '.join(recipient_emails)
     msg['Subject'] = f"Daily Report: Voice Files Count Monitoring (12AM - 11:59PM) - {today_date} IST"
 
@@ -238,6 +231,7 @@ def test_send_mail():
                 <td style="text-align: center;">{transcribed_count}</td>
             </tr>
         </table>
+        <p>For support/complaints/suggestions, please feel free to reach out to: <b>support.brocaly@blenheimchalcot.com</b><br>We’ll be happy to assist. Regards Team Brocaly.</p>
       </body>
     </html>
     """
