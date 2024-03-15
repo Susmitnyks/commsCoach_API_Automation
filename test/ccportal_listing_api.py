@@ -234,7 +234,7 @@ def test_send_mail():
                 <td style="text-align: center;">{transcribed_count}</td>
             </tr>
         </table>
-        <p>For support/complaints/suggestions, please feel free to reach out to: <b>support.brocaly@blenheimchalcot.com</b><br>We’ll be happy to assist.<br>Regards,<br>Team Brocaly.</p>
+        <p>For support/complaints/suggestions, please feel free to reach out to: <b>Service.Desk@brocaly.com</b><br>We’ll be happy to assist.<br>Regards,<br>Team Brocaly.</p>
       </body>
     </html>
     """
