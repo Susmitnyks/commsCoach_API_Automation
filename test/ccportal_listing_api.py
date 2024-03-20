@@ -219,11 +219,11 @@ def test_send_mail():
                 <td style="text-align: center;">Oakbrook</td>
             </tr>
             <tr>
-                <td>Total Files Received in Azure blob storage:</td>
+                <td>Total Files Received in Azure Storage:</td>
                 <td style="text-align: center;">{azure_count}</td>
             </tr>
             <tr>
-                <td>Total Files Received in CMS:</td>
+                <td>Total Files Transcribed to Database:</td>
                 <td style="text-align: center;">{total_count}</td>
             </tr>
             <tr>
