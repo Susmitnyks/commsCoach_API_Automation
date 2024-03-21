@@ -103,7 +103,7 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com","satyendra.kumar@blenheimchalcot.com","lokesh.singh@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
 
     # Variables with total count and success count
     org_mail= org_final
