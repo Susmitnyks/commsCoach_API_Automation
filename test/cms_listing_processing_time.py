@@ -49,6 +49,31 @@ def test_cms_listing_created_by():
     global total_final
     total_final=total
 
+def test_cms_listing_success():
+    url = f"https://cms.comms-coach.englishscore.com/content-manager/collection-types/api::conversation.conversation?page=1&pageSize=10&sort=id:ASC&filters[$and][0][createdAt][$gt]={today_date}&filters[$and][1][status][$eq]=success"
+    payload = {}
+    headers = {
+        'Accept': 'application/json',
+        'Accept-Language': 'en-US,en;q=0.9',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMDg2NjMwMywiZXhwIjoxNzEzNDU4MzAzfQ.dEKeQmWvgG3QGwCFuhXFppEdrfE7II9uSWU7mwXMIMQ',
+        'Connection': 'keep-alive',
+        'Cookie': '_clck=1l4b3wp%7C2%7Cfio%7C0%7C1484; _ga=GA1.2.187986154.1706094271; _ga_G6WKMM3SPZ=GS1.1.1706094271.1.1.1706094324.7.0.0',
+        'Sec-Fetch-Dest': 'empty',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Site': 'same-origin',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        'sec-ch-ua': '"Chromium";v="122", "Not(A:Brand";v="24", "Google Chrome";v="122"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
+    }
+    response = requests.request("GET", url, headers=headers, data=payload)
+    json_response = json.loads(response.text)
+    assert response.status_code == 200
+    success_total=json_response["pagination"]["total"]
+    print("\n Org name is  " + str(success_total))
+    global success_final
+    success_final=success_total
+
 
 def test_cms_listing_updated_by():
     url = f"https://cms.comms-coach.englishscore.com/content-manager/collection-types/api::conversation.conversation?page=1&pageSize=10&sort=updatedAt:DESC&filters[$and][0][createdAt][$gt]={today_date}"
@@ -103,6 +128,7 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
     recipient_emails = ["susmit.surwade@blenheimchalcot.com","satyendra.kumar@blenheimchalcot.com","lokesh.singh@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
 
     # Variables with total count and success count
@@ -110,6 +136,7 @@ def test_send_mail():
     created_at_mail = createdAt_final
     updated_at_mail = updatedAt_final
     processing_mail=proccesing_time_final
+    succes_mail=success_final
 
 
     # Create message container
@@ -129,8 +156,12 @@ def test_send_mail():
                     <td style="text-align: center;">{org_final}</td>
                 </tr>
                 <tr>
-                    <td>Total Files:</td>
+                    <td>Total Files Received In Cms:</td>
                     <td style="text-align: center;">{total_final}</td>
+                </tr>
+                  <tr>
+                    <td>Total Files Processed:</td>
+                    <td style="text-align: center;">{succes_mail}</td>
                 </tr>
                 <tr>
                     <td>First Created At</td>
