@@ -19,6 +19,7 @@ gurl = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversatio
 final_success_count = 0
 final_transcribed_count = 0
 final_azure_count = 0
+final_transcribed_sucess=0
 
 
 # access_token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjUzZWFiMDBhNzc5MTk3Yzc0MWQ2NjJmY2EzODE1OGJkN2JlNGEyY2MiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwNzExNTk5MiwiZXhwIjoxNzA3MTE5NTkyLCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.N-3d3dz02z9Uvsrl2sPK-gwsA8UL2Q6-iuVNsqSCQ_W3i1YuM7EzOHLNzxrNy64dr1N-EBpyUErRuxzMzX50_GrC96b-dH6AVD6khy56YjU5bIXae0sO-aQOoG3UTFu2EJAEGAIiA9dtDyqpXzzyfZsfNB8JxpYuZ_5NN26PPMgZPqAQCISRnLJ8sWqAhi4DEuHm0qtT37ds-tCvFODlPZr2MGYVPe2xEvP_PbVFiAXrHcGPTdfd2iAWnI6Pyoz7Ica-1Rb7DcuWtQgSHSBE4NawXdCKDJTU1rjqwARJ9feefTWGScF-2bgkCm-OzDbWuMCTW_EjHqQz-__EYCNs1w"
@@ -49,7 +50,7 @@ def count_files(account_name, account_key, container_name, modified_date):
         print(e)
 
 
-
+#@pytest.mark.skip(reason="Reason for skipping the test function")
 def test_Azure_file_counts():
         global afile_count
         account_name = "escommscoachinbound"
@@ -164,14 +165,14 @@ def test_listing_sucess_fail_records(page_number):
             success_count += 1
         if conversation_status == "transcribed":
             transcribed_count += 1
-        if conversation_status== "in-progress":
-            transcribed_count += 1
 
 
     global final_success_count
     final_success_count += success_count
     global final_transcribed_count
     final_transcribed_count += transcribed_count
+    global final_transcribed_sucess
+    final_transcribed_sucess = final_success_count + final_transcribed_count
     print(f"\n Running test for page {page_number}")
     # print(final_success_count)
     # print(final_transcribed_count)
@@ -196,12 +197,13 @@ def test_send_mail():
     # Recipient email address
     #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
     recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com",
-                        "help@maxcontact.com","automation@maxcontact.com","dialler.team@sigmaconnected.com","vincent.khomola@sigmaconnected.com","jenna.barnes@sigmaconnected.com","nathier.davids@sigmaconnected.com"]
+                       "help@maxcontact.com","automation@maxcontact.com","dialler.team@sigmaconnected.com","vincent.khomola@sigmaconnected.com","jenna.barnes@sigmaconnected.com","nathier.davids@sigmaconnected.com"]
 
     # Variables with total count and success count
     total_count = TCount
     success_count = final_success_count
     transcribed_count = final_transcribed_count
+    trans_success = final_transcribed_sucess
     azure_count = afile_count
     #azure_count = 5
 
@@ -227,7 +229,7 @@ def test_send_mail():
             </tr>
             <tr>
                 <td>Total Files Transcribed to Database:</td>
-                <td style="text-align: center;">{total_count}</td>
+                <td style="text-align: center;">{trans_success}</td>
             </tr>
             <tr>
                 <td>Total Evaluations Reports Ready:</td>
