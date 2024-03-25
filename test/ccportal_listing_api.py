@@ -164,6 +164,9 @@ def test_listing_sucess_fail_records(page_number):
             success_count += 1
         if conversation_status == "transcribed":
             transcribed_count += 1
+        if conversation_status== "in-progress":
+            transcribed_count += 1
+
 
     global final_success_count
     final_success_count += success_count
