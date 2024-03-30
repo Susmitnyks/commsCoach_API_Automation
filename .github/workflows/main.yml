@@ -51,4 +51,4 @@ jobs:
           body: "Please find the attached Allure report for the pytest API execution."
           to: susmit.s.surwade@gmail.com
           from: susmit.s.surwade@gmail.com
-          attachments: ./allure-report
+          attachments: ./allure-report/allure-report.html
