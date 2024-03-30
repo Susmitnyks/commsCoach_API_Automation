@@ -24,7 +24,7 @@ steps:
 
 - script: |
     pytest test/ccportal_api_automation.py --alluredir=./allure-results
-    /opt/allure-2.15.0/bin/allure generate --single-file ./allure-results -o ./allure-report.html
+    /opt/allure-2.15.0/bin/allure generate --single-file ./allure-results -o ./allure-report
   displayName: 'Run pytest and generate Allure report'
 
 - task: PublishBuildArtifacts@1
@@ -56,8 +56,7 @@ steps:
       $emailBody = "Please find the attached Allure report for the pytest API execution."
 
       # Path to the Allure report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report.html"
-
+      $attachmentPath = "$(System.DefaultWorkingDirectory)/allure-report"
       # Send email with attached Allure report using TLS/SSL
       $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
       $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
