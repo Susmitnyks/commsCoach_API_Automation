@@ -19,7 +19,7 @@ def delete_files_with_extensions(folder_path, extensions):
 # Example usage
 extensions_to_delete = (".json", ".txt")
 # folder_path = r"C:\Users\SusmitSurwade\PycharmProjects\commsCoach_API_Automation\test\allure-results"
-folder_path = r"./allure-results"
+folder_path = r"test/allure-results"
 # @pytest.mark.skip(reason="Skipping this test")
 
 yesterday = (datetime.now().date() - timedelta(days=6)).strftime("%d/%m/%Y")
