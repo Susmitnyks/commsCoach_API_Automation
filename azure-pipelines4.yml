@@ -16,19 +16,21 @@ steps:
     pip install pytest
     pip install allure-pytest
     pip install requests
-    # Download and install Allure CLI
     sudo apt-get update
     sudo apt-get install wget unzip -y
     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
     unzip allure.zip -d /opt
-    export PATH=$PATH:/opt/allure-2.15.0/bin
-  displayName: 'Install dependencies and Allure CLI'
-
+  displayName: 'Install dependencies and download Allure CLI'
 
 - script: |
     pytest test/ccportal_api_automation.py --alluredir=./allure-results
-    allure generate --single-file ./allure-results -o ./allure-report.html
+    /opt/allure-2.15.0/bin/allure generate --single-file ./allure-results -o ./allure-report.html
   displayName: 'Run pytest and generate Allure report'
+
+- task: PublishBuildArtifacts@1
+  inputs:
+    pathtoPublish: 'allure-report.html'
+    artifactName: 'AllureReport'
 
 - task: PowerShell@2
   inputs:
