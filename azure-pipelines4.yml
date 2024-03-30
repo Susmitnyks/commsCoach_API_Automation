@@ -56,7 +56,7 @@ steps:
       $emailBody = "Please find the attached Allure report for the pytest API execution."
 
       # Path to the Allure report
-      $attachmentPath = "$(System.DefaultWorkingDirectory)/allure-report.html"
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report.html"
 
       # Send email with attached Allure report using TLS/SSL
       $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
