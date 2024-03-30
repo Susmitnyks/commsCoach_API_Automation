@@ -14,12 +14,14 @@ steps:
 
 - script: |
     pip install pytest
-    pip install allure-pytest  # Install the Allure plugin for pytest
-    pip install requests  # Install the requests module
+    pip install allure-pytest
+    pip install requests
+    # Download and install Allure CLI
     wget -O allure-2.15.0.tgz https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.tgz
     tar -zxvf allure-2.15.0.tgz
-    export PATH="$PATH:/path/to/allure-2.15.0/bin"  # Adjust the path to the Allure bin directory
-  displayName: 'Install dependencies'
+    # Add Allure CLI directory to PATH
+    export PATH="$PATH:$(pwd)/allure-2.15.0/bin"
+  displayName: 'Install dependencies and Allure CLI'
 
 
 - script: |

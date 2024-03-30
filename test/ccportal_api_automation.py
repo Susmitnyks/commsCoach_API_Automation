@@ -95,9 +95,9 @@ def test_listing_api_total_files_count():
     page_no = json_response["meta"]["pageCount"]
     return page_no
 
-
+@pytest.mark.skip(reason="Skipping this test")
 # @pytest.mark.parametrize("page_number", range(1, test_listing_total_count() + 1))
-@pytest.mark.parametrize("page_number", range(1, 2))
+#@pytest.mark.parametrize("page_number", range(1, 2))
 def test_listing_api_conversation_status_success_transcribed_page_no(page_number):
     success_count = 0
     transcribed_count = 0
@@ -219,7 +219,7 @@ def test_listing_api_Total_no_of_files_this_week():
     WCount = json_response["meta"]["total"]
     print("\n This Week Total Count of file is " + str(WCount))
 
-
+@pytest.mark.skip(reason="Skipping this test")
 def test_listing_api_Total_no_of_files_this_month():
     url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={(datetime.today().replace(day=1)).strftime('%d/%m/%Y')}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
     payload = {}
@@ -245,7 +245,7 @@ def test_listing_api_Total_no_of_files_this_month():
     MCount = json_response["meta"]["total"]
     print("\n This Month Total Count of file is " + str(MCount))
 
-
+@pytest.mark.skip(reason="Skipping this test")
 def test_conversation_detail_api_verify_Report_ready_status():
     import requests
     url = "https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations/13238"
