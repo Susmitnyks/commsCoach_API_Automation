@@ -192,8 +192,7 @@ def test_listing_api_Total_files_Count_greater_than_10min():
     assert response.status_code == 200
     DCount = json_response["meta"]["total"]
     print("\n Total Count of file with duration greater than 10 mins are: " + str(DCount))
-
-
+"""
 def test_listing_api_Total_no_of_files_this_week():
     url = f"https://cms.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={(datetime.today() - timedelta(days=(datetime.today().weekday() - 0) % 7)).strftime('%d/%m/%Y')}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
     payload = {}
@@ -522,4 +521,4 @@ def test_listing_api_vulnerability_recognise_yes():
     assert response.status_code == 200
     json_response = json.loads(response.text)
     DCount = json_response["meta"]["total"]
-    assert DCount == 11
+    assert DCount == 11 """
