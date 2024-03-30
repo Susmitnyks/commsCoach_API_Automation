@@ -72,4 +72,4 @@ jobs:
             $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
             $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
             Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
-        displayName: 'Send Email with attached Allure report'
+
