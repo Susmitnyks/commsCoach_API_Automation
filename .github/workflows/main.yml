@@ -40,6 +40,8 @@ jobs:
         with:
           name: allure-report
           path: ./allure-report
+      - name: Set directory permissions
+        run: chmod -R 755 allure-report
 
       - name: Send Email with attached Allure report
         run: |
