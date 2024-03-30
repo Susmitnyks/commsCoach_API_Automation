@@ -13,6 +13,12 @@ steps:
     addToPath: true
 
 - script: |
+    pip install pytest
+    pip install allure-pytest
+    pip install requests
+  displayName: 'Install pytest'
+
+- script: |
     pytest test/ccportal_api_automation.py --alluredir=allure-results
   displayName: 'Run API automation tests'
 
