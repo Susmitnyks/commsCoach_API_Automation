@@ -9,48 +9,49 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: /commsCoach_API_Automation
 
     steps:
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-    - name: Install dependencies and download Allure CLI
-      run: |
-        pip install pytest allure-pytest requests
-        sudo apt-get update
-        sudo apt-get install wget unzip -y
-        wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
-        unzip allure.zip -d /opt
+      - name: Install dependencies and download Allure CLI
+        run: |
+          pip install pytest allure-pytest requests
+          sudo apt-get update
+          sudo apt-get install wget unzip -y
+          wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
+          unzip allure.zip -d /opt
 
-    - name: Run pytest and generate Allure report
-      working-directory: /commsCoach_API_Automation
-      run: |
+      - name: Run pytest and generate Allure report
+        run: |
           mkdir -p allure-results
           pytest test/ccportal_api_automation.py --alluredir=allure-results
           /opt/allure-2.15.0/bin/allure generate --single-file allure-results -o allure-report
 
+      - name: Publish HTML Report
+        uses: actions/upload-artifact@v2
+        with:
+          name: AllureReport
+          path: allure-report
 
-    - name: Publish HTML Report
-      uses: actions/upload-artifact@v2
-      with:
-        name: AllureReport
-        path: ${{ github.workspace }}/allure-report
-
-    - name: Send Email with attached Allure report
-      run: |
-        # PowerShell script for sending email
-        $smtpServer = "smtp.gmail.com"
-        $smtpPort = 587
-        $from = "susmit.s.surwade@gmail.com"
-        $to = "susmit.s.surwade@blenheimchalcot.com"
-        $todayDate = Get-Date -Format "dd-MM-yyyy"
-        $subject = "Daily Production API Automation report for $todayDate"
-        $username = "susmit.s.surwade@gmail.com"
-        $password = "qzod ltfm nmav tqvw"
-        $emailBody = "Please find the attached Allure report for the pytest API execution."
-        $attachmentPath = "${{ github.workspace }}/allure-report/index.html"
-        $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
-        $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
-        Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
+      - name: Send Email with attached Allure report
+        run: |
+          # PowerShell script for sending email
+          $smtpServer = "smtp.gmail.com"
+          $smtpPort = 587
+          $from = "susmit.s.surwade@gmail.com"
+          $to = "susmit.surwade@blenheimchalcot.com"
+          $todayDate = Get-Date -Format "dd-MM-yyyy"
+          $subject = "Daily Production API Automation report for $todayDate"
+          $username = "susmit.s.surwade@gmail.com"
+          $password = "qzod ltfm nmav tqvw"
+          $emailBody = "Please find the attached Allure report for the pytest API execution."
+          $attachmentPath = "${{ github.workspace }}/allure-report/index.html"
+          $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+          $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
+          Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
