@@ -26,9 +26,10 @@ jobs:
 
       - name: Run pytest and generate Allure report
         run: |
-          #mkdir -p allure-results
-          pytest test/ccportal_api_automation.py --alluredir=allure-results
-          /opt/allure-2.15.0/bin/allure generate --single-file allure-results -o allure-report
+          mkdir -p allure-results
+          cd test  # Navigate to the test directory
+          pytest ccportal_api_automation.py --alluredir=../allure-results
+          /opt/allure-2.15.0/bin/allure generate --single-file ../allure-results -o ../allure-report
 
       - name: Publish HTML Report
         uses: actions/upload-artifact@v2
