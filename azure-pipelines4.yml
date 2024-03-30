@@ -16,7 +16,11 @@ steps:
     pip install pytest
     pip install allure-pytest  # Install the Allure plugin for pytest
     pip install requests  # Install the requests module
+    wget -O allure-2.15.0.tgz https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.tgz
+    tar -zxvf allure-2.15.0.tgz
+    export PATH="$PATH:/path/to/allure-2.15.0/bin"  # Adjust the path to the Allure bin directory
   displayName: 'Install dependencies'
+
 
 - script: |
     pytest test/ccportal_api_automation.py --alluredir=./allure-results
