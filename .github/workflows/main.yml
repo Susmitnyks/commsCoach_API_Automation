@@ -41,14 +41,34 @@ jobs:
           path: ./allure-report
 
       - name: Send Email with attached Allure report
-        uses: dawidd6/action-send-mail@v3
+        uses: PowerShell@2
         with:
-          server_address: smtp.gmail.com
-          server_port: 587
-          username: ${{ secrets.GMAIL_USERNAME }}
-          password: ${{ secrets.GMAIL_PASSWORD }}
-          subject: "Daily Production API Automation report for $(date +%d-%m-%Y)"
-          body: "Please find the attached Allure report for the pytest API execution."
-          to: susmit.s.surwade@gmail.com
-          from: susmit.s.surwade@gmail.com
-          attachments: ./allure-report/allure-report.html
+          targetType: 'inline'
+          script: |
+            # SMTP configuration for Gmail
+            $smtpServer = "smtp.gmail.com"
+            $smtpPort = 587
+            $from = "susmit.s.surwade@gmail.com"
+            $to = @("susmit.s.surwade@blenheimchalcot.com")
+            
+            # Get today's date
+            $todayDate = Get-Date -Format "dd-MM-yyyy"
+            
+            # Set the email subject
+            $subject = "Daily Production API Automation report for $todayDate"
+            
+            # SMTP credentials
+            $username = "susmit.s.surwade@gmail.com"
+            $password = "qzod ltfm nmav tqvw"  # Specify your Gmail password here
+            
+            # Email body
+            $emailBody = "Please find the attached Allure report for the pytest API execution."
+            
+            # Path to the Allure report
+            $attachmentPath = "./allure-report/allure-report.html"
+            
+            # Send email with attached Allure report using TLS/SSL
+            $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+            $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
+            Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
+        displayName: 'Send Email with attached Allure report'
