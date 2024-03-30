@@ -17,10 +17,11 @@ steps:
     pip install allure-pytest
     pip install requests
     # Download and install Allure CLI
-    wget -O allure-2.15.0.tgz https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.tgz
-    tar -zxvf allure-2.15.0.tgz
-    # Add Allure CLI directory to PATH
-    export PATH="$PATH:$(pwd)/allure-2.15.0/bin"
+    sudo apt-get update
+    sudo apt-get install wget unzip -y
+    wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
+    unzip allure.zip -d /opt
+    export PATH=$PATH:/opt/allure-2.15.0/bin
   displayName: 'Install dependencies and Allure CLI'
 
 
