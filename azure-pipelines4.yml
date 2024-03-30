@@ -13,26 +13,24 @@ steps:
     addToPath: true
 
 - script: |
-    pip install pytest
-    pip install allure-pytest
-    pip install requests
+    pytest test/ccportal_api_automation.py --alluredir=allure-results
+  displayName: 'Run API automation tests'
+
+- script: |
     sudo apt-get update
     sudo apt-get install wget unzip -y
     wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
     unzip allure.zip -d /opt
-  displayName: 'Install dependencies and download Allure CLI'
-
-- script: |
-    mkdir -p $(Build.ArtifactStagingDirectory)/allure-results
-    pytest test/ccportal_api_automation.py --alluredir=$(Build.ArtifactStagingDirectory)/allure-results
-    /opt/allure-2.15.0/bin/allure generate --single-file $(Build.ArtifactStagingDirectory)/allure-results -o $(Build.ArtifactStagingDirectory)/allure-report
-  displayName: 'Run pytest and generate Allure report'
+    export PATH=$PATH:/opt/allure-2.15.0/bin
+    allure generate allure-results --clean -o allure-report --format html
+  displayName: 'Generate Allure HTML report'
 
 - task: PublishPipelineArtifact@1
-  displayName: 'Publish HTML Report'
   inputs:
-    targetPath: '$(Build.ArtifactStagingDirectory)/allure-report'
-    ArtifactName: 'AllureReport'
+    pathtoPublish: 'allure-report'
+    artifactName: 'Allure Report'
+    publishLocation: 'Container'
+    displayName: 'Publish Allure report as artifact'
 
 
 - task: PowerShell@2
@@ -59,7 +57,7 @@ steps:
       $emailBody = "Please find the attached Allure report for the pytest API execution."
 
       # Path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
+      $attachmentPath = "allure-report/index.html"
       # Send email with attached Allure report using TLS/SSL
       $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
       $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
