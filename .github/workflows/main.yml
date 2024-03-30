@@ -1,6 +1,7 @@
 name: CI
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
@@ -25,9 +26,9 @@ jobs:
 
     - name: Run pytest and generate Allure report
       run: |
-        mkdir -p ${{ github.workspace }}/allure-results
-        pytest test/ccportal_api_automation.py --alluredir=${{ github.workspace }}/allure-results
-        /opt/allure-2.15.0/bin/allure generate --single-file ${{ github.workspace }}/allure-results -o ${{ github.workspace }}/allure-report
+        mkdir -p allure-results
+        pytest ccportal_api_automation.py --alluredir=allure-results
+        /opt/allure-2.15.0/bin/allure generate --single-file allure-results -o allure-report
 
     - name: Publish HTML Report
       uses: actions/upload-artifact@v2
