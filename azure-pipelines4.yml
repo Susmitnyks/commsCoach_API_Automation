@@ -24,7 +24,7 @@ steps:
 
 - script: |
     pytest test/ccportal_api_automation.py --alluredir=$(Build.ArtifactStagingDirectory)/allure-results
-    /opt/allure-2.15.0/bin/allure generate --single-file $(Build.ArtifactStagingDirectory)/allure-results
+    /opt/allure-2.15.0/bin/allure generate --single-file $(Build.ArtifactStagingDirectory)/allure-report
   displayName: 'Run pytest and generate Allure report'
 
 - task: PublishPipelineArtifact@1
