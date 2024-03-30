@@ -41,7 +41,7 @@ jobs:
           name: allure-report
           path: ./allure-report
       - name: Set directory permissions
-        run: chmod -R 755 allure-report
+        run: chmod -R 755 /home/runner/work/commsCoach_API_Automation/commsCoach_API_Automation/allure-report
 
       - name: Send Email with attached Allure report
         run: |
