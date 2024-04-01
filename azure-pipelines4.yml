@@ -25,7 +25,8 @@ steps:
 - script: |
     mkdir -p $(Build.ArtifactStagingDirectory)/allure-results
     pytest test/ccportal_api_automation.py --alluredir=$(Build.ArtifactStagingDirectory)/allure-results
-    /opt/allure-2.15.0/bin/allure generate --single-file $(Build.ArtifactStagingDirectory)/allure-results -o $(Build.ArtifactStagingDirectory)/allure-report
+    /opt/allure-2.15.0/bin/allure generate $(Build.ArtifactStagingDirectory)/allure-results -o $(Build.ArtifactStagingDirectory)/allure-results
+
   displayName: 'Run pytest and generate Allure report'
 
 - task: PublishPipelineArtifact@1
@@ -44,7 +45,7 @@ steps:
       chmod -R 777 "$(Build.ArtifactStagingDirectory)/allure-report"
       
       # Set path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report"
 
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
