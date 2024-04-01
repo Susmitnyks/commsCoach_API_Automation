@@ -44,7 +44,7 @@ steps:
     targetType: 'inline'
     script: |
       # Set path to the HTML report
-      $attachmentPath = "$(System.ArtifactsDirectory)/AllureReport"
+      $attachmentPath = "$(System.DefaultWorkingDirectory)/1/a/allure-report"
 
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
