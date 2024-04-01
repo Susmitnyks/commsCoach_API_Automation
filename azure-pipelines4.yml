@@ -39,23 +39,24 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      
       # Grant permissions to the script for the folder containing the Allure report
-      icacls "$(Build.ArtifactStagingDirectory)/allure-report" /grant IUSR:(OI)(CI)F /T
+      chmod -R 777 "$(Build.ArtifactStagingDirectory)/allure-report"
+      
+      # Set path to the HTML report
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
 
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
-      $to = @("susmit.s.surwade@blenheimchalcot.com")
+      $to = @("susmit.surwade@blenheimchalcot.com")
       
       # Get today's date
       $todayDate = Get-Date -Format "dd-MM-yyyy"
 
       # Set the email subject
       $subject = "Daily Production API Automation report for $todayDate"
-
-      # Set path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
 
       # SMTP credentials
       $username = "susmit.s.surwade@gmail.com"
@@ -69,6 +70,7 @@ steps:
       $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
   displayName: 'Send Email with attached Allure report'
+
 
 
 
