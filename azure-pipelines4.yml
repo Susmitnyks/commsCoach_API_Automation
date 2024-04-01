@@ -40,8 +40,8 @@ steps:
   displayName: 'List Source Directory Contents'
 
 - script: |
-        chmod -R 777 /home/vsts/work/1/a/allure-report
-  displayName: 'Grant Permissions to Allure Report Directory'
+    chmod -R 777 /home/vsts/work/1
+  displayName: 'Grant Permissions to Parent Directories'
 
 
 - task: PowerShell@2

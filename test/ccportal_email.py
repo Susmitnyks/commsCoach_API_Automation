@@ -61,13 +61,14 @@ def test_send_mail():
 def send_email():
     # Email details
     today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com","ruksar.khan@blenheimchalcot.com","lokesh.singh@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com"]
     recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
     smtp_username = "susmit.s.surwade@gmail.com"
     smtp_password = "qzod ltfm nmav tqvw"
     receiver_email = "susmit.surwade@blenheimchalcot.com"
-    subject = f"CC DAILY AUTOMATION REPORT: {today_date}"
+    subject = f"CC DAILY API AUTOMATION REPORT: {today_date}"
     body = "Please find the attached test automation html report."
     #filepath = "allure-report/index.html"
     filepath = "./allure-report/index.html"

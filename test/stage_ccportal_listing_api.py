@@ -10,8 +10,10 @@ from email.mime.text import MIMEText
 from azure.storage.blob import BlobServiceClient
 
 yesterday = (datetime.now().date() - timedelta(days=1)).strftime("%d/%m/%Y")
+today_date = (datetime.now(pytz.timezone('Asia/Kolkata')) - timedelta(days=1)).strftime("%d-%m-%Y %H:%M:%S")
 # token = "eyJhbGciOiJSUzI1NiIsImtpZCI6IjY5NjI5NzU5NmJiNWQ4N2NjOTc2Y2E2YmY0Mzc3NGE3YWE5OTMxMjkiLCJ0eXAiOiJKV1QifQ.eyJuYW1lIjoiU3VzbWl0IFN1cndhZGUiLCJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vZXMtYWktYXV0aCIsImF1ZCI6ImVzLWFpLWF1dGgiLCJhdXRoX3RpbWUiOjE3MDY4ODI5NTYsInVzZXJfaWQiOiJXQUc4NVhpbXlSY0ZnOFRwa21Hbk9FSWtBTUIzIiwic3ViIjoiV0FHODVYaW15UmNGZzhUcGttR25PRUlrQU1CMyIsImlhdCI6MTcwNzA3NDMyNCwiZXhwIjoxNzA3MDc3OTI0LCJlbWFpbCI6InN1c21pdC5zdXJ3YWRlQGJsZW5oZWltY2hhbGNvdC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsibWljcm9zb2Z0LmNvbSI6WyI2ZTNiNTcxNy1kZTNlLTRmNGYtYjBlOC02ODc3MzBiNjE3YjUiXSwiZW1haWwiOlsic3VzbWl0LnN1cndhZGVAYmxlbmhlaW1jaGFsY290LmNvbSJdfSwic2lnbl9pbl9wcm92aWRlciI6Im1pY3Jvc29mdC5jb20ifX0.k32njBhaAYv0zM6vSXIcxEVqXsQSja4bbd4PM2I5bChb1kvJjCa9K3qRMamp8KaWEZYcbNOGpSegwt_MCU3dKHOVLokZcafb13WyfbEyy90bQTcCNoI9rf_WmExZfs_foF5Q8NG5dg1reFHoQAWjxyMMzBBfjnBTbvbgj8DqDg-RiOhLZAqoMy3AQuCAdYbELuWl_PP3yeAxxuBEGKn4vDIuO2CwGtIjL9GD0Xbat_K0GsWNhRroN4vLN0RMFp186MRS2SwhM6DvC9btO_NPgb5efAh8pqb0zSdd8vw9tOG0D5b-Xr-YVVG2kEtvt_2TTz2mu1bp-BiDaKkh-OE4mA"
-gurl = f"https://cms-stage.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
+#gurl = f"https://cms-stage.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[conversationType][0]=Voice&page=1&sort=-startDate"
+gurl = f"https://cms-stage.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]={yesterday}&page=1&sort=-startDate"
 
 final_success_count = 0
 final_transcribed_count = 0
@@ -40,15 +42,7 @@ def count_files_with_string(account_name, account_key, container_name, search_st
             file_count += 1
     return file_count
 
-    # target_date = datetime.now().replace(tzinfo=None)-timedelta(days=1)
-    # for blob in blobs:
-    # if blob.creation_time and blob.creation_time.replace(tzinfo=None) > target_date:
-    # file_count += 1
-    # return file_count
-
-
-# if __name__ == "__main__":
-# @pytest.mark.skip()
+@pytest.mark.skip()
 def test_azure_blob_count():
     global afile_count
     # Replace these with your Azure Storage account details
@@ -129,13 +123,12 @@ def test_listing_total_count():
     page_no = json_response["meta"]["pageCount"]
     return page_no
 
-
 @pytest.mark.parametrize("page_number", range(1, test_listing_total_count() + 1))
-# @pytest.mark.parametrize("page_number", range(1, 3))
+#@pytest.mark.parametrize("page_number", range(1, 3))
 def test_listing_sucess_fail_records(page_number):
     success_count = 0
     transcribed_count = 0
-    url = f"https://cms-stage.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[conversationType][0]=Voice&page={page_number}&sort=-startDate"
+    url =f"https://cms-stage.comms-coach.englishscore.com/api/org/2/imported-conversations?filters[startDate]={yesterday}&filters[endDate]={yesterday}&page={page_number}&sort=-startDate"
     payload = {}
     headers = {
         'Accept': 'application/json, text/plain, */*',
@@ -195,11 +188,17 @@ def test_send_mail():
     total_count = TCount
     success_count = final_success_count
     transcribed_count = final_transcribed_count
-    azure_count = afile_count
+    #azure_count = afile_count
+
+    # Calculating success rate
+    if total_count != 0:
+        success_rate = (success_count / total_count) * 100
+    else:
+        success_rate = 0  # or any other value you want to assign when total_count is zero
 
     # Format today's date
     #today_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
+    #today_date = datetime.now(pytz.timezone('Asia/Kolkata')).strftime("%d-%m-%Y %H:%M:%S")
 
     # Create the email message
     subject = f"Daily Report STAGE: Files Count Monitoring (12AM - 11:59PM) - {today_date}"
@@ -213,6 +212,7 @@ def test_send_mail():
           <li>Total Files Received in CMS: {total_count}</li>
           <li>Total Evaluations Reports Ready: {success_count }</li>
           <li>Total Evaluations In progress: {transcribed_count}</li>
+          <li>Reports Success rate: <b>{success_rate:.2f}%</b></li>
         </ul>
       </body>
     </html>

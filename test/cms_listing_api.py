@@ -69,12 +69,13 @@ def test_send_mail():
 
     smtp_server = "smtp.gmail.com"
     smtp_port = 587
-    smtp_username = "susmit.s.surwade@gmail.com"
-    smtp_password = "qzod ltfm nmav tqvw"
+    smtp_username = "automationsreport@gmail.com"
+    smtp_password ="ixwe pwrz xprs adwf"
+    #"qzod ltfm nmav tqvw"
 
     # Recipient email address
-    #recipient_email = "susmit.surwade@blenheimchalcot.com"
-    recipient_emails=["susmit.surwade@blenheimchalcot.com", "susmit.s.surwade@gmail.com"]
+    recipient_emails = "susmit.surwade@blenheimchalcot.com"
+    #recipient_emails=["susmit.surwade@blenheimchalcot.com", "susmit.s.surwade@gmail.com"]
 
     # Variables with total count and success count
     total_count = TCount
