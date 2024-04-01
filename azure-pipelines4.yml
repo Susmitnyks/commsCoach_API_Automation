@@ -43,7 +43,7 @@ steps:
     script: |
       
       # Set permissions on the directory
-      icacls "$(Build.ArtifactStagingDirectory)/allure-report" /grant "Everyone:(OI)(CI)(F)" /T
+      chmod -R 777 "$(Build.ArtifactStagingDirectory)/allure-report"
       
       # Set path to the HTML report
       $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report"
