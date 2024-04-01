@@ -41,7 +41,7 @@ steps:
 
 - script: |
         chmod -R 777 /home/vsts/work/1/a/allure-report
-      displayName: 'Grant Permissions to Allure Report Directory'
+  displayName: 'Grant Permissions to Allure Report Directory'
 
 
 - task: PowerShell@2
