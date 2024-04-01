@@ -37,7 +37,7 @@ steps:
   displayName: 'List Source Directory Contents'
 
 - script: |
-    chmod -R 777 $(Build.ArtifactStagingDirectory)
+    chmod -R 777 $(Build.ArtifactStagingDirectory)/allure-results
   displayName: 'Grant Permissions to Allure Report Directory'
 
 - task: PowerShell@2
@@ -46,7 +46,7 @@ steps:
     script: |
       
       # Set path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)"
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-results"
 
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
