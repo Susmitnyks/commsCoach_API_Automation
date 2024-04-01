@@ -36,7 +36,7 @@ steps:
   displayName: 'List Source Directory Contents'
 
 - script: |
-    chmod -R 777 /home/vsts/work/1/a
+    chmod -R 777 $(Build.SourcesDirectory)
   displayName: 'Grant Permissions to Allure Report Directory'
 
 - task: PowerShell@2
