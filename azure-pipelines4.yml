@@ -40,7 +40,7 @@ steps:
   displayName: 'List Source Directory Contents'
 
 - script: |
-    chmod +r /home/vsts/work/1/a/allure-report
+    chmod +r /home/vsts
   displayName: 'Grant Permissions to Parent Directories'
 
 
