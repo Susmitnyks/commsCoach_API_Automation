@@ -28,13 +28,19 @@ steps:
     /opt/allure-2.15.0/bin/allure generate --clean $(Build.ArtifactStagingDirectory)/allure-results -o $(Build.ArtifactStagingDirectory)/allure-report
   displayName: 'Run pytest and generate Allure report'
 
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish HTML Report'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/allure-report'
+    ArtifactName: 'AllureReport'
+
 - script: |
     ls -l $(Build.ArtifactStagingDirectory)
     ls -R $(Build.ArtifactStagingDirectory)
   displayName: 'List Source Directory Contents'
 
 - script: |
-    chmod -R 777 $(Build.ArtifactStagingDirectory)/allure-report/
+    chmod -R 777 $(Build.ArtifactStagingDirectory)/allure-report
   displayName: 'Grant Permissions to Allure Report Directory'
 
 - task: PowerShell@2
@@ -42,7 +48,7 @@ steps:
     targetType: 'inline'
     script: |
       # Set path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/"
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report"
 
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
