@@ -39,13 +39,11 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-       # Grant permissions to the script for the folder containing the Allure report
+      # Grant permissions to the script for the folder containing the Allure report
       icacls "$(Build.ArtifactStagingDirectory)/allure-report" /grant IUSR:(OI)(CI)F /T
-      
+
       # Set path to the HTML report
       $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
-
-     
 
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
@@ -71,5 +69,6 @@ steps:
       $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
   displayName: 'Send Email with attached Allure report'
+
 
 
