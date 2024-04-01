@@ -32,6 +32,7 @@ steps:
   displayName: 'Run pytest and generate Allure report'
 
 - script: |
+    ls -l /home/vsts/work/1/a
     ls -R $(Build.ArtifactStagingDirectory)
   displayName: 'List Source Directory Contents'
 
