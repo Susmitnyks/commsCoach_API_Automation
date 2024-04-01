@@ -43,7 +43,7 @@ steps:
     script: |
       
       # Set permissions on the directory
-      chmod -R 777 "$(Build.ArtifactStagingDirectory)/allure-report"
+      chmod -R 777 $(Build.ArtifactStagingDirectory)/allure-report
       
       # Set path to the HTML report
       $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report"
