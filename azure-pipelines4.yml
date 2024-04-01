@@ -32,11 +32,11 @@ steps:
   displayName: 'Run pytest and generate Allure report'
 
 - script: |
-    ls -R $(Build.SourcesDirectory)
+    ls -R $(Build.ArtifactStagingDirectory)
   displayName: 'List Source Directory Contents'
 
 - script: |
-    chmod -R 777 $(Build.SourcesDirectory)
+    chmod -R 777 $(Build.ArtifactStagingDirectory)
   displayName: 'Grant Permissions to Allure Report Directory'
 
 - task: PowerShell@2
