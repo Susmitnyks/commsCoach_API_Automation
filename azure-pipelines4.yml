@@ -42,20 +42,20 @@ steps:
       # Grant permissions to the script for the folder containing the Allure report
       icacls "$(Build.ArtifactStagingDirectory)/allure-report" /grant IUSR:(OI)(CI)F /T
 
-      # Set path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
-
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
-      $to = @("susmit.surwade@blenheimchalcot.com")
+      $to = @("susmit.s.surwade@blenheimchalcot.com")
       
       # Get today's date
       $todayDate = Get-Date -Format "dd-MM-yyyy"
 
       # Set the email subject
       $subject = "Daily Production API Automation report for $todayDate"
+
+      # Set path to the HTML report
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
 
       # SMTP credentials
       $username = "susmit.s.surwade@gmail.com"
