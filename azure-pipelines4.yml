@@ -39,12 +39,21 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      # Set path to the HTML report
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
+
+      # Grant permissions to the script for the folder containing the Allure report
+      $acl = Get-Acl -Path "$(Build.ArtifactStagingDirectory)/allure-report"
+      $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("IUSR", "FullControl", "ContainerInherit, ObjectInherit", "None", "Allow")
+      $acl.SetAccessRule($accessRule)
+      Set-Acl -Path "$(Build.ArtifactStagingDirectory)/allure-report" -AclObject $acl
+
       # SMTP configuration for Gmail
       $smtpServer = "smtp.gmail.com"
       $smtpPort = 587
       $from = "susmit.s.surwade@gmail.com"
-      #$to = @("susmit.surwade@blenheimchalcot.com", "ruksar.khan@blenheimchalcot.com", "ami.jambusaria@blenheimchalcot.com")
       $to = @("susmit.surwade@blenheimchalcot.com")
+      
       # Get today's date
       $todayDate = Get-Date -Format "dd-MM-yyyy"
 
@@ -58,10 +67,9 @@ steps:
       # Email body
       $emailBody = "Please find the attached Allure report for the pytest API execution."
 
-      # Path to the HTML report
-      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
       # Send email with attached Allure report using TLS/SSL
       $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
       $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
   displayName: 'Send Email with attached Allure report'
+
