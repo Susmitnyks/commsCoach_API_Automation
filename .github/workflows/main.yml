@@ -77,7 +77,7 @@ jobs:
 #      - name: Set directory permissions
 #        run: chmod -R 755 /home/runner/work/commsCoach_API_Automation/commsCoach_API_Automation/allure-report/index.html
 #
-      - name: Send Email with attached Allure report
+      - name: Send Email with attached Allure reports
         run: |
           # SMTP configuration for Gmail
           $smtpServer = "smtp.gmail.com"
