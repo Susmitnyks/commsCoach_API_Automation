@@ -32,17 +32,51 @@ jobs:
 
       - name: Run tests and generate Allure reports
         run: |
-          pytest test/ccportal_api_automation.py --alluredir=./allure-results
-          /opt/allure-2.15.0/bin/allure generate ./allure-results --report -o ./allure-report
+          pytest test/ccportal_api_automation.py --alluredir=../allure-results
+#          /opt/allure-2.15.0/bin/allure generate ./allure-results --report -o ./allure-report
 
-      - name: Publish Allure report
-        uses: actions/upload-artifact@v2
+      - name: Load test report history
+        uses: actions/checkout@v3
+        if: always()
+        continue-on-error: true
         with:
-          name: allure-report
-          path: ./allure-report
-      - name: Set directory permissions
-        run: chmod -R 755 /home/runner/work/commsCoach_API_Automation/commsCoach_API_Automation/allure-report/index.html
+          ref: gh-pages
+          path: gh-pages
 
+      - name: Build test report
+        uses: simple-elf/allure-report-action@v1.7
+        if: always()
+        with:
+          gh_pages: gh-pages
+          allure_history: allure-history
+          allure_results: allureresults
+
+      - name: Publish test report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+
+      - name: Post the link to the reports
+        if: always()
+        uses: Sibz/github-status-action@v1
+        with:
+          authToken: ${{secrets.GITHUB_TOKEN}}
+          context: 'Test report'
+          state: 'success'
+          sha: ${{ github.sha }}
+          target_url: https://github.com/Susmitnyks/commsCoach_API_Automation/${{ github.run_number }}/index.html
+
+#      - name: Publish Allure report
+#        uses: actions/upload-artifact@v2
+#        with:
+#          name: allure-report
+#          path: ./allure-report
+#      - name: Set directory permissions
+#        run: chmod -R 755 /home/runner/work/commsCoach_API_Automation/commsCoach_API_Automation/allure-report/index.html
+#
       - name: Send Email with attached Allure report
         run: |
           # SMTP configuration for Gmail
@@ -50,23 +84,23 @@ jobs:
           $smtpPort = 587
           $from = "susmit.s.surwade@gmail.com"
           $to = @("susmit.surwade@blenheimchalcot.com")
-          
+
           # Get today's date
           $todayDate = Get-Date -Format "dd-MM-yyyy"
-          
+
           # Set the email subject
           $subject = "Daily Production API Automation report for $todayDate"
-          
+
           # SMTP credentials
           $username = "susmit.s.surwade@gmail.com"
           $password = "qzod ltfm nmav tqvw"  # Specify your Gmail password here
-          
+
           # Email body
           $emailBody = "Please find the attached Allure report for the pytest API execution."
-          
+
           # Path to the Allure report
-          $attachmentPath = "./allure-report/index.html"
-          
+          $attachmentPath = "https://github.com/Susmitnyks/commsCoach_API_Automation/${{ github.run_number }}/index.html"
+
           # Send email with attached Allure report using TLS/SSL
           $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
           $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
