@@ -40,7 +40,7 @@ steps:
   displayName: 'List Source Directory Contents'
 
 - script: |
-    chmod "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
+    chmod u+rwx,g+rx,o+rx /home/vsts/work/1/a/allure-report/index.html
   displayName: 'Grant Permissions to Parent Directories'
 
 
