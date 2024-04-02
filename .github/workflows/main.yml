@@ -41,7 +41,7 @@ jobs:
           name: allure-report
           path: ./allure-report
       - name: Set directory permissions
-        run: chmod -R 755 /home/runner/work/commsCoach_API_Automation/commsCoach_API_Automation/allure-report
+        run: chmod -R 755 /home/runner/work/commsCoach_API_Automation/commsCoach_API_Automation/allure-report/index.html
 
       - name: Send Email with attached Allure report
         run: |
@@ -65,7 +65,7 @@ jobs:
           $emailBody = "Please find the attached Allure report for the pytest API execution."
           
           # Path to the Allure report
-          $attachmentPath = "./allure-report"
+          $attachmentPath = "./allure-report/index.html"
           
           # Send email with attached Allure report using TLS/SSL
           $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
