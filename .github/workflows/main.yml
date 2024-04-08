@@ -55,7 +55,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.Allure_auto }}
           publish_branch: gh-pages
           publish_dir: allure-history
 
@@ -63,7 +63,7 @@ jobs:
         if: always()
         uses: Sibz/github-status-action@v1
         with:
-          authToken: ${{secrets.GITHUB_TOKEN}}
+          authToken: ${{secrets.Allure_auto}}
           context: 'Test report'
           state: 'success'
           sha: ${{ github.sha }}
