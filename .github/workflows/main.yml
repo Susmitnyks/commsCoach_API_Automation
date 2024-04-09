@@ -93,7 +93,8 @@ jobs:
           context: 'Test report'
           state: 'success'
           sha: ${{ github.sha }}
-          target_url: https://github.com/Susmitnyks/commsCoach_API_Automation/${{ github.run_number }}/index.html
+          target_url: https://ramchandrapatilBCI.github.io/Susmitnyks/commsCoach_API_Automation/${{ github.run_number }}/index.html
+
 
 #      - name: Publish Allure report
 #        uses: actions/upload-artifact@v2
