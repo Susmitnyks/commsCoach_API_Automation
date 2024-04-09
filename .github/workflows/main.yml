@@ -94,7 +94,7 @@ jobs:
           state: 'success'
           sha: ${{ github.sha }}
 #          target_url: https://github.com/Susmitnyks/commsCoach_API_Automation/${{ github.run_number }}/index.html
-          target_url: https://Susmitnyks.github.io/AG-Abot-MVP_Forked/${{ github.run_number }}/index.html
+          target_url: https://Susmitnyks.github.io/commsCoach_API_Automation/${{ github.run_number }}/index.html
 
 
 #      - name: Publish Allure report
