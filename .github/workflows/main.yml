@@ -15,10 +15,36 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
+      - name: Install Chrome
+        run: |
+          sudo apt update
+          sudo apt install -y wget
+          wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb
+          sudo apt-get install -y -f
+
+      - name: Install Allure
+        run: |
+          wget -O allure-2.15.0.tgz https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.tgz
+          tar -zxvf allure-2.15.0.tgz
+          sudo mv allure-2.15.0/bin/allure /usr/local/bin/
+          rm allure-2.15.0.tgz
+          rm -rf allure-2.15.0
+
+      - name: Set up Python 3.11.7
+        uses: actions/setup-python@v3
         with:
-          python-version: '3.x'
+          python-version: "3.11.7"
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install pytest selenium==4.17.0 allure-pytest allure-python-commons==2.13.2 deepeval telnetlib3
+
+#      - name: Set up Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.x'
 
       - name: Install dependencies
         run: |
@@ -51,7 +77,7 @@ jobs:
           allure_history: allure-history
           allure_results: allureresults
 
-      - name: Publish test report
+      - name: Publish test reports
         uses: peaceiris/actions-gh-pages@v3
         if: always()
         with:
