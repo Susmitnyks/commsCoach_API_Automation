@@ -655,3 +655,88 @@ steps:
       $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
       Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
   displayName: 'Send Email with attached Allure report'
+----------------------------------------------------------
+ALLURE INDEX HTML attchment working
+
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '3.x'
+    addToPath: true
+
+- script: |
+    pip install pytest
+    pip install allure-pytest
+    pip install requests
+    sudo apt-get update
+    sudo apt-get install wget unzip -y
+    wget https://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/2.15.0/allure-commandline-2.15.0.zip -O allure.zip
+    unzip allure.zip -d /opt
+  displayName: 'Install dependencies and download Allure CLI'
+
+- script: |
+    mkdir -p $(Build.ArtifactStagingDirectory)/allure-results
+    pytest test/ccportal_api_automation.py --alluredir=$(Build.ArtifactStagingDirectory)/allure-results
+    /opt/allure-2.15.0/bin/allure generate --clean $(Build.ArtifactStagingDirectory)/allure-results -o $(Build.ArtifactStagingDirectory)/allure-report
+  displayName: 'Run pytest and generate Allure report'
+
+- task: PublishPipelineArtifact@1
+  displayName: 'Publish HTML Report'
+  inputs:
+    targetPath: '$(Build.ArtifactStagingDirectory)/allure-report'
+    ArtifactName: 'AllureReport'
+
+- script: |
+    ls -l $(Build.ArtifactStagingDirectory)
+    ls -R $(Build.ArtifactStagingDirectory)
+  displayName: 'List Source Directory Contents'
+
+- script: |
+    chmod u+rwx,g+rx,o+rx /home/vsts/work/1/a/allure-report/index.html
+  displayName: 'Grant Permissions to Parent Directories'
+
+
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: |
+      # Set path to the HTML report
+      $attachmentPath = "$(Build.ArtifactStagingDirectory)/allure-report/index.html"
+
+      # SMTP configuration for Gmail
+      $smtpServer = "smtp.gmail.com"
+      $smtpPort = 587
+      $from = "susmit.s.surwade@gmail.com"
+      $to = @("susmit.surwade@blenheimchalcot.com")
+
+      # Get today's date
+      $todayDate = Get-Date -Format "dd-MM-yyyy"
+
+      # Set the email subject
+      $subject = "Daily Production API Automation report for $todayDate"
+
+      # SMTP credentials
+      $username = "susmit.s.surwade@gmail.com"
+      $password = "qzod ltfm nmav tqvw"
+
+      # Email body
+      $emailBody = "Please find the attached Allure report for the pytest API execution."
+
+      # Send email with attached Allure report using TLS/SSL
+      $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+      $credential = New-Object System.Management.Automation.PSCredential ($username, $securePassword)
+      Send-MailMessage -SmtpServer $smtpServer -Port $smtpPort -From $from -To $to -Subject $subject -Body $emailBody -Attachments $attachmentPath -Credential $credential -UseSsl
+  displayName: 'Send Email with attached Allure report'
+
+
+
+
+
