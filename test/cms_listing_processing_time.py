@@ -8,8 +8,8 @@ from email.utils import formataddr
 import pytz
 import requests
 
-today_date = (datetime.now(pytz.utc) - timedelta(days=1)).replace(hour=18, minute=30, second=0, microsecond=0).strftime(
-    "%Y-%m-%dT%H:%M:%S.000Z") # keep days-1 always in UTC its send at days-1 time
+today_date = (datetime.now(pytz.utc) - timedelta(days=4)).replace(hour=18, minute=30, second=0, microsecond=0).strftime(
+    "%Y-%m-%dT%H:%M:%S.000Z") # keep days=1 always in UTC its send at days-1 time
 
 def test_cms_listing_created_by():
     url = f"https://cms.comms-coach.englishscore.com/content-manager/collection-types/api::conversation.conversation?page=1&pageSize=10&sort=createdAt:ASC&filters[$and][0][createdAt][$gt]={today_date}"
@@ -17,7 +17,7 @@ def test_cms_listing_created_by():
     headers = {
         'Accept': 'application/json',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMDg2NjMwMywiZXhwIjoxNzEzNDU4MzAzfQ.dEKeQmWvgG3QGwCFuhXFppEdrfE7II9uSWU7mwXMIMQ',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMzc4MDM3NSwiZXhwIjoxNzE2MzcyMzc1fQ.s6cul4p67cd84Ie5NRZASkC5ml1wKXRzOYTT1R_s3zc',
         'Connection': 'keep-alive',
         'Cookie': '_clck=1l4b3wp%7C2%7Cfio%7C0%7C1484; _ga=GA1.2.187986154.1706094271; _ga_G6WKMM3SPZ=GS1.1.1706094271.1.1.1706094324.7.0.0',
         'Sec-Fetch-Dest': 'empty',
@@ -55,7 +55,7 @@ def test_cms_listing_success():
     headers = {
         'Accept': 'application/json',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMDg2NjMwMywiZXhwIjoxNzEzNDU4MzAzfQ.dEKeQmWvgG3QGwCFuhXFppEdrfE7II9uSWU7mwXMIMQ',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMzc4MDM3NSwiZXhwIjoxNzE2MzcyMzc1fQ.s6cul4p67cd84Ie5NRZASkC5ml1wKXRzOYTT1R_s3zc',
         'Connection': 'keep-alive',
         'Cookie': '_clck=1l4b3wp%7C2%7Cfio%7C0%7C1484; _ga=GA1.2.187986154.1706094271; _ga_G6WKMM3SPZ=GS1.1.1706094271.1.1.1706094324.7.0.0',
         'Sec-Fetch-Dest': 'empty',
@@ -81,7 +81,7 @@ def test_cms_listing_updated_by():
     headers = {
         'Accept': 'application/json',
         'Accept-Language': 'en-US,en;q=0.9',
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMDg2NjMwMywiZXhwIjoxNzEzNDU4MzAzfQ.dEKeQmWvgG3QGwCFuhXFppEdrfE7II9uSWU7mwXMIMQ',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MTMsImlhdCI6MTcxMzc4MDM3NSwiZXhwIjoxNzE2MzcyMzc1fQ.s6cul4p67cd84Ie5NRZASkC5ml1wKXRzOYTT1R_s3zc',
         'Connection': 'keep-alive',
         'Cookie': '_clck=1l4b3wp%7C2%7Cfio%7C0%7C1484; _ga=GA1.2.187986154.1706094271; _ga_G6WKMM3SPZ=GS1.1.1706094271.1.1.1706094324.7.0.0',
         'Sec-Fetch-Dest': 'empty',
@@ -128,8 +128,8 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com","satyendra.kumar@blenheimchalcot.com","lokesh.singh@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","aashish.paruvada@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com","satyendra.kumar@blenheimchalcot.com","lokesh.singh@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","aashish.paruvada@blenheimchalcot.com"]
 
     # Variables with total count and success count
     org_mail= org_final
