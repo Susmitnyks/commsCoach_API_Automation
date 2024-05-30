@@ -1,4 +1,5 @@
 import json
+import os
 import smtplib
 from email.utils import formataddr
 import pytest
@@ -69,9 +70,11 @@ def search_term_in_csv_filenames(sftp, search_term, directory):
 
 def test_count_SFTP_Files():
     # SFTP connection details
+    # SFTP connection details
         hostname = 'blprduksouthevtsta.blob.core.windows.net'
         username = 'blprduksouthevtsta.obfteam'
-        key_file_path = 'C:\Susmit\Blenheim Chalcot\CommsCouch\SFTP\obfteamkey'
+        # key_file_path = 'C:\Susmit\Blenheim Chalcot\CommsCouch\SFTP\obfteamkey'
+        key_file_path = os.path.join(os.path.dirname(__file__), 'keys', 'obfteamkey')
         global afile_count
         client, sftp = connect_to_sftp(hostname, username, key_file_path)
         total_occurrences1 = search_term_in_csv_filenames(sftp, search_term, remote_directory1)
@@ -148,7 +151,7 @@ def test_listing_total_count():
 
 
 @pytest.mark.parametrize("page_number", range(1, test_listing_total_count() + 1))
-# @pytest.mark.parametrize("page_number", range(1, 2))
+#@pytest.mark.parametrize("page_number", range(1, 2))
 def test_listing_sucess_fail_records(page_number):
     success_count = 0
     transcribed_count = 0
