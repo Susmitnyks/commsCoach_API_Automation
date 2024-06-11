@@ -740,3 +740,73 @@ steps:
 
 
 
+------------------------------------------------------------
+azure oakbrook azure counts
+
+#@pytest.mark.skip(reason="Reason for skipping the test function")
+def test_Azure_file_counts():
+    global afile_count
+    # Your connection string
+    # connection_string = "DefaultEndpointsProtocol=https;AccountName=bldevuksouthevtsta;AccountKey=zGvS2VUse2PWOHz6EhIxAb0BT5j+kpS2l2gdH0BqvOr7aq+aNk35C8euInI5oOZjdv83qeytD6cT+ASt7gKBDQ==;EndpointSuffix=core.windows.net"
+    connection_string = "DefaultEndpointsProtocol=https;AccountName=blprduksouthevtsta;AccountKey=scciDAiG/KakT0wwK0RX281SFE9tTei3vK0XOz21f4Dm0nyD4+PjOGtBtwEIE+0+yR47Id+UgAyV+ASt6IQ+aA==;EndpointSuffix=core.windows.net"
+    container_name = "liberis"
+    blob_path = "to-be-processed/"
+
+    # Create a BlobServiceClient
+    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
+
+    # Get the container client
+    container_client = blob_service_client.get_container_client(container_name)
+
+    # Define the cutoff time
+    now = datetime.now(timezone.utc)
+    yesterdayaz = now - timedelta(days=1)
+    cutoff_time = yesterdayaz.replace(hour=18, minute=0, second=0, microsecond=0)
+    cutoff_time_str = cutoff_time.strftime('%Y-%m-%dT%H:%M:%S.000Z')
+    # cutoff_time_str = '2024-04-12T06:32:42.000Z'
+    # cutoff_time = datetime.strptime(cutoff_time_str, '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=timezone.utc)
+
+    # Fetch the list of blobs and count those created after the cutoff time
+    blob_list = container_client.list_blobs(name_starts_with=blob_path)
+    count = 0
+
+    for blob in blob_list:
+        blob_properties = container_client.get_blob_client(blob).get_blob_properties()
+        creation_time = blob_properties['last_modified']
+        if creation_time > cutoff_time:
+            count += 1
+
+    print(f"Number of files uploaded after {cutoff_time_str}: {count}")
+    afile_count = count
+
+"""
+@pytest.mark.skip(reason="Reason for skipping the test function")
+def test_refresh_token():
+    global access_token
+    url = "https://login.microsoftonline.com/a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c/oauth2/v2.0/token"
+
+    payload = "client_id=16f9d357-3ffe-40dc-9039-29f9b14d810e&scope=api%3A%2F%2F5c1bd365-0696-410b-ac58-a11b8ca3c72b%2F.default%20openid%20profile%20offline_access&grant_type=refresh_token&client_info=1&x-client-SKU=msal.js.browser&x-client-VER=3.10.0&x-ms-lib-capability=retry-after, h429&x-client-current-telemetry=5|61,0,,,|,&x-client-last-telemetry=5|0|||0,0&client-request-id=018f7cc7-3d1d-7811-8869-f6cbcd92aced&refresh_token=0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rADE.AgABAwEAAADnfolhJpSnRYB1SVj-Hgd8AgDs_wUA9P-m-xViL6d-e8J7uzxXytXEJZedCztp1yX7TTHWKqJ97uDf5zEeeIGk-YFn7xIpul6TTkbebrAlcIItr3sXstQsvNdRfK1Z1VhuAQCb9-a52PluhaROT_eOGEarEWJFzd2V4fF7v935iRQExPvAcgfJC12XZQIIw-RIwdDuaRVIYqQcL9R-R3QhfiUVsmPViFKsRhis1XQ1phCdXaPiZ0KIpr4PcpbTTEfeoeK6MtSCOHF6kTQlCU7T_J5YnjEEqCzPEyDZv4_TsfVzJYxew2VAFvMYHOQCtcf4U49MfSJskO0eGPHRsWswkSIhy-vOS58r3Ap7zlNrDJ5FrSDGmKz1T1koz-LcOwsLxHEAXIOAf5s_hPdjVnr0pvLpVsVI2wCChSLMQrONdYqPi1HmtMax2iGmu2kuU8PJ2MbmfadXdgBxx5Q9IKPRiNmDqXbU5LzQAu21Z2BKpY41sPJaMejdhnZBv3OShsEhj_k1FYDCPsrYVtKuhKXjk61eoS7VRSqBHOjqXkSJjs-ffMj_guD6ORYCZqtGzkvM-cl47hgspwCISFBdowla7DN-3pzYDVJIdIaohrCwQsgysBDI2QBDEDffpIgP-HonxGMcHLrWb7CKeFRMc0RbtpRx9QL3U38KmSQJWgQ2Lpen8Z518TJOF9ribq1UICaSejgFi7l3tDOo7bsBp21tF3LogD6Lb521br7AJkCxfHnbCjO3s8m2VqkU71_nsIUw_YJPZ3VEmp6cDzNNnsg2oGquY3Sxb2v-sB-OGCOxHWWULMbectTKX0_5CdMaK_uov3hwR-9uxsI3KVITHWd1BnPKh1jIlfewKbrLFpBWYQHV5B-rcMKNGytnjjUTvWVFXKOH92j49_TUk2tmVvW1iUef7EfjhIvRYXLUQqIgvEM5Ja1vAULdcfGlmRRTX00JdXKtUuK5Gs0BUz-X8uoPyN3KE0N_F9TjqwawCo2wQdba7fHFd03tqN65M2dQ8GpIf8iIzosMqcTGzBU7Kh85iXXbvExlmlPSs0BnYUICbx1GClmBPHzrcSnTJMO8d6bVc6BQg4aYxt3vB_68qheGrARTXa-Bo-uZy-NwH8kTiT-7DN6Gj2-_dqot05eZTqwJdzapQq20GGaF5Hut18bIo8vki5PlOUPei3hx4QG-4wdHGOdnZ_s&X-AnchorMailbox=Oid%3A6e3b5717-de3e-4f4f-b0e8-687730b617b5%40dd5343bd-f2c4-4f9b-8178-8dfb6445911b"
+    headers = {
+        'accept': '*/*',
+        'accept-language': 'en-US,en;q=0.9',
+        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+        'origin': 'https://prd-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net',
+        'priority': 'u=1, i',
+        'referer': 'https://prd-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net/',
+        'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"',
+        'sec-fetch-dest': 'empty',
+        'sec-fetch-mode': 'cors',
+        'sec-fetch-site': 'cross-site',
+        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Cookie': 'fpc=AiS_UZrYAVlHm3pTW4pc0xUxvaQxAQAAABqm190OAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
+    }
+
+    response = requests.request("POST", url, headers=headers, data=payload)
+    json_response = json.loads(response.text)
+    assert response.status_code == 200
+    access_token = json_response["access_token"]
+    return access_token
+"""
+-----------------------------------------------------------------
