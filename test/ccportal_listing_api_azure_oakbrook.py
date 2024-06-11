@@ -40,7 +40,7 @@ folder = (datetime.now() - timedelta(days=1)).strftime('%d%m%Y')
 
 # remote directory
 remote_directory1 = '/to-be-processed'
-remote_directory2 = '/processed/2024/May/' + folder
+remote_directory2 = '/processed/2024/June/' + folder
 
 
 def connect_to_sftp(hostname, username, key_file_path):
@@ -52,6 +52,29 @@ def connect_to_sftp(hostname, username, key_file_path):
     return client, sftp
 
 
+def search_term_in_csv_filenames(sftp, search_term, directory):
+    occurrences = 0
+    try:
+        file_list = sftp.listdir_attr(directory)
+    except FileNotFoundError:
+        print(f"Directory not found: {directory}")
+        return occurrences
+    except Exception as e:
+        print(f"Error while accessing {directory}: {e}")
+        return occurrences
+
+    for item in file_list:
+        remote_path = f"{directory}/{item.filename}"
+        try:
+            if stat.S_ISREG(item.st_mode):
+                if item.filename.endswith('.csv') and search_term in item.filename:
+                    occurrences += 1
+            elif stat.S_ISDIR(item.st_mode):
+                occurrences += search_term_in_csv_filenames(sftp, search_term, remote_path)
+        except Exception as e:
+            print(f"Error while processing {remote_path}: {e}")
+    return occurrences
+""""
 def search_term_in_csv_filenames(sftp, search_term, directory):
     occurrences = 0
     file_list = sftp.listdir_attr(directory)
@@ -67,7 +90,7 @@ def search_term_in_csv_filenames(sftp, search_term, directory):
         except Exception as e:
             print(f"Error while processing {remote_path}: {e}")
     return occurrences
-
+"""
 def test_count_SFTP_Files():
     # SFTP connection details
     # SFTP connection details
@@ -88,7 +111,7 @@ def test_count_SFTP_Files():
         client.close()
 def test_refresh_token():
     global access_token
-    refresh_token="0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rAD4.AgABAwEAAADnfolhJpSnRYB1SVj-Hgd8AgDs_wUA9P_e83L067rJk_Y1U0t76I6AQBX-cadVxu1cR_dbX9kwoMtredVyfqUkzAeVgXUnw3d580kVaDPiamMGdMoCv8wPrNMO88CwCjqbJm68QMW_6R85wx2l85OTgomiP-kK_MZcZujaJ5_-zGK0RuQizTOLY5WBLsyh57YZ-iGXKmJ52wOk1Xy4qyD-014lozzaoYrB_CZ2SSzSnjsw02NoDQePTM3yjpuX52EMttNCy_yoDKY86EWycbMeQYo8CGFalTNNC3Mfh4FP2_jsal2bjUbJA2rT1w6KYG6AmcVZ91GbSIo8vPHf8icVi5RpK1CwgTwR479h5a_LpWdQflC45akMRJf293R_TfaRT1HA13Hy3VTTOoVD8_VhYQZuDO-SCom3IVrUVkTZSzPiSY5iz-j5Jtg-0f9hAMM6JkULGVzOuqBjyTJXyEBZB_P0CyJpd2YiCt_CyJrylmlzHdk6cB25iMyhTLEUzw1_Sxl60AjGM-F7ICKAAVcbdOdq0y3khKu9tH8E7U-TMEUCLcbHCyvsDunbQaZomWV7UiAQylUigXL31jmN7mn4DyCBQ3nCj_k44ZK3rLAvx0FNbZsK0wtLcnKUUly4yeZef79rg0RItTogomtxmT8b-GgtJcdd_hi8tLyoV19kVqNUroN2NXUOmwxDWlTcjbLG4Aqm4Sqs-S6-8_zg4IDbjs6VQhsw7fcuyPDc3XyLGhDcoPxwn1911GiWMKCcjTwABGixb_wvgHeQB4SPoJrHoAjx0aGM3ovFnR7eQiJnX-rBI2E-6gM9KwmzWf0i85TtQJ-gwF7iMUrmuknzBBJFeYofWXd4StDuhQ9Xy8gdiUp13_iILocN4wortkfy3b9kwHk"
+    refresh_token="0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rAD4.AgABAwEAAAApTwJmzXqdR4BN2miheQMYAgDs_wUA9P-24a7QRHvAKMpi61RWNeDUeJJPs7WbOPJ0enVViaf2AwNCaOyWSbm1Pzzm463rsDMN4e2JAuAfiZzGHv7rjS1SvXBjg621A88EKxoHlGtSqxd0MhpCHKXinGZXahFsKU91t9GuBYZ3FskCBaY14-EitdT2UnC7h4mK0WpJ79Y5b_FZGQwq6b5oKOC3kcips0NGC5rtwzmX6CySvt0WvIC38lmqgzd0K_NRYB_d4wpJVnt37bTKTe5WVRn6wgKshpK9d_qtua9aBrWYlcRFR58B2pgZgpC3UspAlN9vNy0U_QFiJdQsXlNT1er-CNPClW1Kp2UXSS1-pfO_vDWhz1CJnDfXooAHpYQj3_Ylnq9LpHqt2KbJ2NUYhvn9FRav0kXe2XZUL03MilPgl8PAYn_0SjeQo-p1rbYpmH-p33owlrRKknq2xI7OzzkuEt_qgcn_gIVsiWL2SvR_AO4bAZ9w8e_B-3MZh1pFaOY244nRPl5NBVmjl4dI7rcEEjru1fMGxzXSVmKk1fBnbuH-I51nCGYzLbx7cKuM2uqGJbdWuf_Swdpu6QnDgN8hIBYV0lgDnMMLSqZ04hl5ZLZhYIxO5YFsLxr_cEquKXMoJkWJFxFtNAJtHdkZenpTOH521YXwBYN8--CuQESfH3gL-gSMt1fs_A-r4R0d1z_tOYXcOWHd9aCzQxIrlLIxRACTKZUzYvPawa3p82UM8ygDpDHvnQTBa8OwyffQrAbKsib_kzFbvNRKfNnOJBXj60UEQkKo48zzsxik8ZljPvuhJ73LDpi8-CAekIU0818H7ELqUpyql3k8VCo5ARwHOlVBwzh8UgKbvsT1MzG18zdTbIrX2kszU7hk1QUrHZ6A"
     url = "https://login.microsoftonline.com/a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c/oauth2/v2.0/token"
     payload = f"""
     client_id=16f9d357-3ffe-40dc-9039-29f9b14d810e&scope=api%3A%2F%2F5c1bd365-0696-410b-ac58-a11b8ca3c72b%2F.default%20openid%20profile%20offline_access&grant_type=refresh_token&client_info=1&x-client-SKU=msal.js.browser&x-client-VER=3.10.0&x-ms-lib-capability=retry-after, h429&x-client-current-telemetry=5|61,0,,,|,&x-client-last-telemetry=5|0|||0,0&client-request-id=018fc45e-3ddb-70dd-b714-e2a7962db9a9&refresh_token={refresh_token}&X-AnchorMailbox=Oid%3Abff03e80-44f4-4038-b3b2-b44711acb7cc%40a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c
@@ -115,6 +138,7 @@ def test_refresh_token():
     assert response.status_code == 200
     access_token = json_response["access_token"]
     print(access_token)
+    print("ok")
     return access_token
 
 
@@ -217,11 +241,11 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com", "satyendra.kumar@blenheimchalcot.com",
-                        "ruksar.khan@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com",
-                       "ami.jambusaria@blenheimchalcot.com", "rinkesh.das@blenheimchalcot.com"]
-    # recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com",
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com", "satyendra.kumar@blenheimchalcot.com",
+                        #"ruksar.khan@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com",
+                      # "ami.jambusaria@blenheimchalcot.com", "rinkesh.das@blenheimchalcot.com"]
+    #recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com",
     # "help@maxcontact.com","automation@maxcontact.com","dialler.team@sigmaconnected.com","vincent.khomola@sigmaconnected.com","jenna.barnes@sigmaconnected.com","nathier.davids@sigmaconnected.com","aashish.paruvada@blenheimchalcot.com"]
 
     # Variables with total count and success count
