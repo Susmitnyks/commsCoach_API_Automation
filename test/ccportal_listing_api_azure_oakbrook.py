@@ -109,37 +109,50 @@ def test_count_SFTP_Files():
         afile_count = total_files
         sftp.close()
         client.close()
-def test_refresh_token():
-    global access_token
-    refresh_token="0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rAD4.AgABAwEAAAApTwJmzXqdR4BN2miheQMYAgDs_wUA9P8I4nkVarZZo9ibtGzkFyPe40KfdEODSPXPuixPJXgb6NOcYmwSrEtxK6XoSC3KdNlWpbrdhYiTFiISCeNMnL8HIXvjPU6DwVO13XeaHjr8gAD8-JPlGV2m3FF9plQgbe2pUuMkYuXySN4FrCxu-K_ZzE-zuGPJ9vA-tee2C1I41bPpTZQAPzW82oG0jjLrOIaNmWYSN_Ef4I5ZKGtrPkFjnYvywfA8tYaLNW-Nv4ZxMWmX3FVjuDpZfLvUAilhJ5CK-HOhIYCEbPnGzPjxzrmpImGVBYIz4gEj2fcyyIEP4Dt-qvobkbS6xU0T3ZvF0TJa2SpmWEPw9qU9v5IPiV9gywPPCTbg-4u3ank_LyqqXMK1TkBHpURuwvT-YaKuHDiemIsqxVwqsbiquQvdeEA_bB3NVhFaGGWHgeKiWvJlzFEewA3nEkOYvGNOD7XB5F_pAQv7C5NmnqLAg-5H_Mdt-cm2Fn-o1pt5OOOnMZR2J00IwG09YjrShpNxIPDmuqWj7bL1PHrPNY4qh5XX9TA5Tnl-jn_FUVnkEV103Vb2EQzsUEf56LXVTXQX7qWyUFCFYrQLO13peob1Vog247wKqpH2SCaPyocRmg6F7pDXONmQ0kBgS3FZ1tBWAuuI9b2tZ1SJLNTisukYAyPhepvWuSoQctROgKSHTnXSkyXGWfBbXqX-kINH5OE4gV9na1aQAC55ZJ1pPmyv_AoAo1L6I4pBmWx_uTSFgcE1TALjFMbs94EB62zVnWdvyWqVTG5JmiiGrexTII00_Xdb1rjwfQzRtIxpPKy5OWNqBp7ve1zYAkMArVxPJAlH0Ojc7aPHFgkkON9mf_Rh2LpUmbPyVe98crPEbdFS-keSlA"
-    url = "https://login.microsoftonline.com/a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c/oauth2/v2.0/token"
-    payload = f"""
-    client_id=16f9d357-3ffe-40dc-9039-29f9b14d810e&scope=api%3A%2F%2F5c1bd365-0696-410b-ac58-a11b8ca3c72b%2F.default%20openid%20profile%20offline_access&grant_type=refresh_token&client_info=1&x-client-SKU=msal.js.browser&x-client-VER=3.10.0&x-ms-lib-capability=retry-after, h429&x-client-current-telemetry=5|61,0,,,|,&x-client-last-telemetry=5|0|||0,0&client-request-id=018fc45e-3ddb-70dd-b714-e2a7962db9a9&refresh_token={refresh_token}&X-AnchorMailbox=Oid%3Abff03e80-44f4-4038-b3b2-b44711acb7cc%40a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c
-    """
-    headers = {
-        'accept': '*/*',
-        'accept-language': 'en-US,en;q=0.9',
-        'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
-        'origin': 'https://prd-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net',
-        'priority': 'u=1, i',
-        'referer': 'https://prd-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net/',
-        'sec-ch-ua': '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"',
-        'sec-fetch-dest': 'empty',
-        'sec-fetch-mode': 'cors',
-        'sec-fetch-site': 'cross-site',
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
-        'Cookie': 'buid=0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rAAA.AQABGgEAAADnfolhJpSnRYB1SVj-Hgd8sA68yoNDUzpNnm2yctkG7iHuanKy5Pme2pKakH3ra8ra20-1SNzmcgziKurrH3oWWvoaqu36BuoRlTKmSA_I8hzdTDEQvIx0Ac5Pf-zDjhMgAA; fpc=AiS_UZrYAVlHm3pTW4pc0xUxvaQxAQAAAIEa6d0OAAAAd37W5QEAAADFHendDgAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
-    }
+# def test_refresh_token():
+#     global access_token
+#     refresh_token="0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rAD4.AgABAwEAAAApTwJmzXqdR4BN2miheQMYAgDs_wUA9P-ZEf172Sen1Wz2CvPc7CUJdQNBrELkTZpacNu4b9IKPtMuZxZornnR5x5s7u9gEOTAMOYOCq7CpvInmMXCczUTcgtnmqgeRyO0qSwwGfYaVPCCT-MEmD0IDGZlnGkxVMPZrLVzTolSsoAPflACQ-dAkRpfnL8ktmNWCU3Jg_0-idNjInM65YRsBSuBa6GgokMlFivzRMUMTDeAg8kHgdOBR-WOFF0QRAIPSyUVJon2lk6mBhlqtHTifbGngU85F6R-GyRjiekVm5C-8LjRlS8ztp9lYLLkEh_-9x7t8lSEntKQwyJ-CAt9gQ6gr4Owkky8VcIiB_UQm40NWBf_PGav-_kJhdJYCUky3YQUOccDeG9DE42zceFqa-zaPzUEo0VvK9a3ZUASbbL9Z1IcF1RvqFy6CYBSqrYn7wMFUjV2ZK8JtC0cTWyUITtsWnaa4V7Dbk4uabN67y04JofJxY1aw7H_Za8_FKJme-620NWitQAeAlL1r-XcXuy5PRROzeT01rXvszKLsCAyc2adOCPgMi9C-6Er6pwFyxDC4voHJfTfldLeR-dTgoZfGhTObnphHtZbPxJhHhsyveDaNBzKM9I-NazXZw5DrHfICypWkENnQd_vz_G36DS_R4Xs7PGgnEPPrzIuPIVz98t_QCn4nAcBIuuI5iuD0RSlilNKRX-bxeZVAExWTEcYHv1JnZrFHX0IVwvXx-bW-Pmfpm5HA9qFx9GX50c819VlkQixaUqcfOFVGv-yBhS-9WoMZ4NSApWdh61If9pnSc2hzQ27WIfI7lwp63ZTpVIc65yCesrSDV9qA-WgjbI0AQ2F0I4qwDZwhj5GUU7RctwZ-i87HVryaKqx2AWjkimy"
+#     url = "https://login.microsoftonline.com/a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c/oauth2/v2.0/token"
+#     payload = f"""
+#     client_id=16f9d357-3ffe-40dc-9039-29f9b14d810e&scope=api%3A%2F%2F5c1bd365-0696-410b-ac58-a11b8ca3c72b%2F.default%20openid%20profile%20offline_access&grant_type=refresh_token&client_info=1&x-client-SKU=msal.js.browser&x-client-VER=3.10.0&x-ms-lib-capability=retry-after, h429&x-client-current-telemetry=5|61,0,,,|,&x-client-last-telemetry=5|0|||0,0&client-request-id=018fc45e-3ddb-70dd-b714-e2a7962db9a9&refresh_token={refresh_token}&X-AnchorMailbox=Oid%3Abff03e80-44f4-4038-b3b2-b44711acb7cc%40a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c
+#     """
+#     headers = {
+#         'accept': '*/*',
+#         'accept-language': 'en-US,en;q=0.9',
+#         'content-type': 'application/x-www-form-urlencoded;charset=utf-8',
+#         'origin': 'https://prd-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net',
+#         'priority': 'u=1, i',
+#         'referer': 'https://prd-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net/',
+#         'sec-ch-ua': '"Google Chrome";v="125", "Chromium";v="125", "Not.A/Brand";v="24"',
+#         'sec-ch-ua-mobile': '?0',
+#         'sec-ch-ua-platform': '"Windows"',
+#         'sec-fetch-dest': 'empty',
+#         'sec-fetch-mode': 'cors',
+#         'sec-fetch-site': 'cross-site',
+#         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/125.0.0.0 Safari/537.36',
+#         'Cookie': 'buid=0.Aa4AQI6NoMVMoEeB08Q7of_LXFfT-Rb-P9xAkDkp-bFNgQ6rAAA.AQABGgEAAADnfolhJpSnRYB1SVj-Hgd8sA68yoNDUzpNnm2yctkG7iHuanKy5Pme2pKakH3ra8ra20-1SNzmcgziKurrH3oWWvoaqu36BuoRlTKmSA_I8hzdTDEQvIx0Ac5Pf-zDjhMgAA; fpc=AiS_UZrYAVlHm3pTW4pc0xUxvaQxAQAAAIEa6d0OAAAAd37W5QEAAADFHendDgAAAA; stsservicecookie=estsfd; x-ms-gateway-slice=estsfd'
+#     }
+#
+#     response = requests.request("POST", url, headers=headers, data=payload)
+#     json_response = json.loads(response.text)
+#     assert response.status_code == 200
+#     access_token = json_response["access_token"]
+#     print(access_token)
+#     print("ok")
+#     return access_token
 
-    response = requests.request("POST", url, headers=headers, data=payload)
-    json_response = json.loads(response.text)
-    assert response.status_code == 200
-    access_token = json_response["access_token"]
-    print(access_token)
-    print("ok")
-    return access_token
+def test_refresh_token():
+        url = "https://PRD-brocaly-d0d5h0a3deaedvbq.z02.azurefd.net/generate_token"
+        payload = "{\r\n\r\n\"email\":\"service_oakbrook@brocaly.com\",\r\n\r\n\"secret_key\":\"nC@RA5$me+^hr5PG6u{+BbJ3QSE.d7xsqmXnPL1ob,Ud'IoY^~\"\r\n\r\n}"
+        headers = {
+       'Content-Type': 'text/plain'
+        }
+        response = requests.request("POST", url, headers=headers, data=payload)
+        output = response.text.strip()
+        #print(output)
+        return output
+
+
 
 
 def test_listing_total_count():
@@ -241,12 +254,9 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com", "satyendra.kumar@blenheimchalcot.com",
-                        #"ruksar.khan@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com",
-                      # "ami.jambusaria@blenheimchalcot.com", "rinkesh.das@blenheimchalcot.com"]
-    recipient_emails = ["satyendra.kumar@blenheimchalcot.com","jeff.miranda@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com",
-    "help@maxcontact.com","automation@maxcontact.com","dialler.team@sigmaconnected.com","vincent.khomola@sigmaconnected.com","jenna.barnes@sigmaconnected.com","nathier.davids@sigmaconnected.com","aashish.paruvada@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com"]
+    #recipient_emails = ["satyendra.kumar@blenheimchalcot.com","susmit.surwade@blenheimchalcot.com", "lokesh.singh@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com",
+    #"help@maxcontact.com","automation@maxcontact.com","dialler.team@sigmaconnected.com","vincent.khomola@sigmaconnected.com","jenna.barnes@sigmaconnected.com","nathier.davids@sigmaconnected.com","aashish.paruvada@blenheimchalcot.com"]
 
     # Variables with total count and success count
     total_count = TCount
