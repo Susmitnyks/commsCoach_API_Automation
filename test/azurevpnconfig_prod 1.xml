@@ -1,0 +1,41 @@
+<AzVpnProfile xmlns:i="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://schemas.datacontract.org/2004/07/">
+  <any xmlns:d2p1="http://schemas.datacontract.org/2004/07/System.Xml" i:nil="true" />
+  <clientauth>
+    <aad>
+      <audience>41b23e61-6c1e-4545-b367-cd054e0ed4b4</audience>
+      <cachesigninuser>true</cachesigninuser>
+      <enablegrouptoken>false</enablegrouptoken>
+      <issuer>https://sts.windows.net/a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c/</issuer>
+      <tenant>https://login.microsoftonline.com/a08d8e40-4cc5-47a0-81d3-c43ba1ffcb5c</tenant>
+    </aad>
+    <cert i:nil="true" />
+    <type>aad</type>
+    <usernamepass i:nil="true" />
+  </clientauth>
+  <clientconfig>
+     <dnsservers>
+        <dnsserver>10.0.250.4</dnsserver>
+    </dnsservers>
+  </clientconfig>
+  <name>BL-PRD-UKSouth-VNET</name>
+  <protocolconfig>
+    <sslprotocolConfig>
+      <transportprotocol>tcp</transportprotocol>
+    </sslprotocolConfig>
+  </protocolconfig>
+  <serverlist>
+    <ServerEntry>
+      <displayname i:nil="true" />
+      <fqdn>azuregateway-0f980072-2941-4183-bebb-66998cf20f48-5c8d000b317d.vpn.azure.com</fqdn>
+    </ServerEntry>
+  </serverlist>
+  <servervalidation>
+    <Cert>
+      <hash>DF3C24F9BFD666761B268073FE06D1CC8D4F82A4</hash>
+      <issuer i:nil="true" />
+    </Cert>
+    <serversecret>a60ebb620be4f06913fe9d365537ceea6730de6577d8b8a6419abb5f8615abaa71b5f2d782c4cd10b80bcaab0c93523b239d0c2ac8dd654f63dda8adac8993dd2f0fd38b09e7a0967547f29c2bd5fd0e2c8c6a8bf7ada331c416ed68a34a4a0f82fd917b552e8c587174e6cb1abeba1163aafe10f71a10e1b0fe7a8268192014395fac584d53a15f845888b1f1e5d3d6fe78d672eef841bf99e2fe4f16c397ea49b31ac237695dbbe2ec8f478ee2d028386ff74e41e393c01b387ac857ad43db2b7dd56f283910a30fe564e7e0a5572f0fb620d6dec5944b5652ceb42961d4b073f6ffedfc4fddba2b368a610c9a93d19ee0f577f01be01b6d3feef583e069a0</serversecret>
+    <type>cert</type>
+  </servervalidation>
+  <version>1</version>
+</AzVpnProfile>
