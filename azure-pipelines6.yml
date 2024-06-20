@@ -18,9 +18,10 @@ steps:
 - script: |
     sudo apt-get update
     sudo apt-get install -y openvpn
-    sudo openvpn --config path/to/your/vpn-config.xml &
+    sudo openvpn --config test/azurevpnconfig_prod1.xml &
     sleep 10  # Wait for the VPN connection to establish
   displayName: 'Install and Activate Azure VPN'
+
 
 - script: |
     sudo apt-get update
