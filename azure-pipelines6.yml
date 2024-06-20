@@ -2,13 +2,18 @@ trigger:
 - master
 
 pool:
-  name: susmit
+  vmImage: ubuntu-latest
+
+strategy:
+  matrix:
+    Python39:
+      python.version: '3.9'
 
 steps:
 - task: UsePythonVersion@0
   inputs:
-    versionSpec: '3.9'
-  displayName: 'Use Python 3.9'
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
 
 - script: |
     sudo apt-get update
@@ -16,6 +21,7 @@ steps:
     sudo azure-vpn-client connect --config test/azurevpnconfig_prod1.xml
     sleep 20  # Wait for the VPN connection to establish
   displayName: 'Install and Activate Azure VPN'
+
 
 - script: |
     if ! [[ "18.04 20.04 22.04 23.04" == *"$(lsb_release -rs)"* ]]; then
@@ -32,6 +38,7 @@ steps:
     source ~/.bashrc
     sudo apt-get install -y unixodbc-dev
   displayName: 'Install ODBC Driver 18 for SQL Server'
+
 
 - script: |
     python -m pip install --upgrade pip
