@@ -23,16 +23,20 @@ steps:
   displayName: 'Install and Activate Azure VPN'
 
 - script: |
-    sudo apt-get update
-    sudo apt-get install -y unixodbc-dev
-    sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-    sudo curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
-    sudo apt-get update
-    sudo apt-get install -y mssql-tools unixodbc-dev
-    sudo ln -sfn /opt/mssql-tools/bin/* /usr/local/bin/
-    echo "/opt/mssql-tools/lib/" | sudo tee /etc/ld.so.conf.d/mssql-tools.conf
-    sudo ldconfig
-  displayName: 'Install ODBC Driver 18 for SQL Server'
+      sudo apt-get update
+      sudo apt-get install -y unixodbc-dev
+      sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+      sudo curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+      sudo apt-get update
+      sudo apt-get install -y mssql-tools unixodbc-dev
+      sudo ln -sfn /opt/mssql-tools/bin/* /usr/local/bin/
+      echo "/opt/mssql-tools/lib/" | sudo tee /etc/ld.so.conf.d/mssql-tools.conf
+      sudo ldconfig
+      ls -l /opt/mssql-tools/bin/
+      ls -l /usr/local/bin/
+      echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
+    displayName: 'Install ODBC Driver 18 for SQL Server'
+
 
 - script: |
     python -m pip install --upgrade pip
