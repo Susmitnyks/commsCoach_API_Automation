@@ -57,8 +57,8 @@ def test_send_mail():
     # Sender and recipient email addresses
     sender_email = 'no-reply@mail.englishscore.com'
     # Recipient email address
-    recipient_emails = ["susmit.surwade@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","satyendra.kumar@blenheimchalcot.com","akshay.rahul@blenheimchalcot.com"]
-    #recipient_emails = ["susmit.surwade@blenheimchalcot.com","akshay.rahul@blenheimchalcot.com"]
+    #recipient_emails = ["susmit.surwade@blenheimchalcot.com","rinkesh.das@blenheimchalcot.com","ami.jambusaria@blenheimchalcot.com","satyendra.kumar@blenheimchalcot.com","akshay.rahul@blenheimchalcot.com"]
+    recipient_emails = ["susmit.surwade@blenheimchalcot.com","akshay.rahul@blenheimchalcot.com"]
 
     # Create message container
     msg = MIMEMultipart()
