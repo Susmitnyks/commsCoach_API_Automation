@@ -2,7 +2,7 @@ trigger:
 - master
 
 pool:
-  name: YourSelfHostedAgentPoolName
+  name: susmit
 
 steps:
 - task: UsePythonVersion@0
