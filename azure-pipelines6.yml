@@ -17,10 +17,11 @@ steps:
 
 - script: |
     sudo apt-get update
-    sudo apt-get install -y openvpn
-    sudo openvpn --config test/azurevpnconfig_prod1.xml &
+    sudo apt-get install -y azure-vpn-client
+    sudo azure-vpn-client connect --config test/azurevpnconfig_prod1.xml
     sleep 10  # Wait for the VPN connection to establish
   displayName: 'Install and Activate Azure VPN'
+
 
 - script: |
     if ! [[ "18.04 20.04 22.04 23.04" == *"$(lsb_release -rs)"* ]]; then
