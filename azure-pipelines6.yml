@@ -19,9 +19,9 @@ steps:
     sudo apt-get update
     sudo apt-get install -y unixodbc-dev
     sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
-    sudo curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+    sudo curl https://packages.microsoft.com/config/ubuntu/20.04/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
     sudo apt-get update
-    sudo apt-get install -y mssql-tools unixodbc-dev
+    sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
   displayName: 'Install ODBC Driver 18 for SQL Server'
 
 - script: |
