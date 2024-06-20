@@ -35,7 +35,7 @@ steps:
       ls -l /opt/mssql-tools/bin/
       ls -l /usr/local/bin/
       echo "LD_LIBRARY_PATH: $LD_LIBRARY_PATH"
-    displayName: 'Install ODBC Driver 18 for SQL Server'
+  displayName: 'Install ODBC Driver 18 for SQL Server'
 
 
 - script: |
