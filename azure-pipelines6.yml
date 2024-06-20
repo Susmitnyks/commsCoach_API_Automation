@@ -1,14 +1,9 @@
-
-# Python package
-# Create and test a Python package on multiple Python versions.
-# Add steps that analyze code, save the dist with the build record, publish to a PyPI-compatible index, and more:
-# https://docs.microsoft.com/azure/devops/pipelines/languages/python
-
 trigger:
 - master
 
 pool:
   vmImage: ubuntu-latest
+
 strategy:
   matrix:
     Python39:
@@ -21,6 +16,15 @@ steps:
   displayName: 'Use Python $(python.version)'
 
 - script: |
+    sudo apt-get update
+    sudo apt-get install -y unixodbc-dev
+    sudo curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+    sudo curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/msprod.list
+    sudo apt-get update
+    sudo apt-get install -y mssql-tools unixodbc-dev
+  displayName: 'Install ODBC Driver 18 for SQL Server'
+
+- script: |
     python -m pip install --upgrade pip
     pip install -r requirements.txt
   displayName: 'Install dependencies'
@@ -28,6 +32,4 @@ steps:
 - script: |
     pip install pytest pytest-azurepipelines
     pytest test/flag_call_main.py
-
-
-  displayName: 'pytest'
+  displayName: 'Run tests with pytest'
