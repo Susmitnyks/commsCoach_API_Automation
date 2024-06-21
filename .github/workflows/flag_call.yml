@@ -1,0 +1,51 @@
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+strategy:
+  matrix:
+    Python39:
+      python.version: '3.9'
+
+steps:
+- task: UsePythonVersion@0
+  inputs:
+    versionSpec: '$(python.version)'
+  displayName: 'Use Python $(python.version)'
+
+- script: |
+    sudo apt-get update
+    sudo apt-get install -y azure-vpn-client
+    sudo azure-vpn-client connect --config test/azurevpnconfig_prod1.xml
+    sleep 40  # Wait for the VPN connection to establish
+  displayName: 'Install and Activate Azure VPN'
+
+
+- script: |
+    if ! [[ "18.04 20.04 22.04 23.04" == *"$(lsb_release -rs)"* ]]; then
+        echo "Ubuntu $(lsb_release -rs) is not currently supported."
+        exit 1
+    fi
+
+    curl https://packages.microsoft.com/keys/microsoft.asc | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc
+    curl https://packages.microsoft.com/config/ubuntu/$(lsb_release -rs)/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+    sudo apt-get update
+    sudo ACCEPT_EULA=Y apt-get install -y msodbcsql18
+    sudo ACCEPT_EULA=Y apt-get install -y mssql-tools18
+    echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
+    source ~/.bashrc
+    sudo apt-get install -y unixodbc-dev
+  displayName: 'Install ODBC Driver 18 for SQL Server'
+
+
+- script: |
+    python -m pip install --upgrade pip
+    pip install -r requirements.txt
+  displayName: 'Install dependencies'
+
+- script: |
+    pip install pytest pytest-azurepipelines
+    pytest test/flag_call_main.py
+  displayName: 'Run tests with pytest'
