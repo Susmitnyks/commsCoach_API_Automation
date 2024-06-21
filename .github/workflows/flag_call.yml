@@ -22,11 +22,16 @@ jobs:
       with:
         python-version: ${{ matrix.python-version }}
 
-    - name: Install Azure VPN client
+    - name: Install dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y azure-vpn-client
-        sudo azure-vpn-client connect --config test/azurevpnconfig_prod1.xml
+        sudo apt-get install -y openvpn
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Activate VPN connection
+      run: |
+        sudo openvpn --config test/azurevpnconfig_prod1.ovpn &   # Use .ovpn config file if available
         sleep 40  # Wait for the VPN connection to establish
 
     - name: Check Ubuntu version and install ODBC Driver 18 for SQL Server
@@ -44,11 +49,6 @@ jobs:
         echo 'export PATH="$PATH:/opt/mssql-tools18/bin"' >> ~/.bashrc
         source ~/.bashrc
         sudo apt-get install -y unixodbc-dev
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
 
     - name: Run tests with pytest
       run: |
